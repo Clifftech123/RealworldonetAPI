@@ -1,0 +1,6 @@
+@RealworldonetAPI.Presentation_HostAddress = http://localhost:5125
+
+GET {{RealworldonetAPI.Presentation_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
