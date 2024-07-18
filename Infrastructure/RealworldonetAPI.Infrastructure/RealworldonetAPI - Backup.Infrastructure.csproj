@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-	  <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 	<ItemGroup>
@@ -12,11 +11,7 @@
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.0" />
 	</ItemGroup>
 	<ItemGroup>
-	  <Folder Include="Interfaces\" />
-	  <Folder Include="Repositories\" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\core\Domain\RealworldonetAPI.Domain\RealworldonetAPI.Domain.csproj" />
+	  <Folder Include="NewFolder\" />
 	</ItemGroup>
 
 </Project>
