@@ -5,7 +5,7 @@ namespace RealworldonetAPI.Application.Commands.User
 {
     public class UpdateUserCommand : IRequest<UserDto>
     {
-        public UpdateUserDto User { get; set; }
+        public UpdateUserWrapper User { get; set; }
     }
 
 }

@@ -16,7 +16,7 @@ namespace RealworldonetAPI.Application.Services
 
         public string GetUserId()
         {
-            // Assuming the user's ID is stored as the NameIdentifier claim
+
             return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }

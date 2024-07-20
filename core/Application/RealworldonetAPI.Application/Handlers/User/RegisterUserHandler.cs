@@ -7,12 +7,7 @@ using RealworldonetAPI.Domain.Entities;
 namespace RealworldonetAPI.Application.Commands.User
 {
 
-    public class RegisterUser : IRequest<UserDto>
-    {
-        public UserRegisterDto userdto { get; set; }
-    }
-
-    public class RegisterUserHandler : IRequestHandler<RegisterUser, UserDto>
+    public class RegisterUserHandler : IRequestHandler<RegisterUserCommand, UserDto>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
@@ -23,28 +18,65 @@ namespace RealworldonetAPI.Application.Commands.User
             _tokenService = tokenService;
         }
 
-        // Register a new user and return the user details 
-        public async Task<UserDto> Handle(RegisterUser request, CancellationToken cancellationToken)
+
+        public async Task<UserDto> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
         {
-            var user = new ApplicationUser { UserName = request.userdto.Username, Email = request.userdto.Email };
-            var result = await _userManager.CreateAsync(user, request.userdto.Password);
+            var userDto = request.userdto?.User;
+            if (userDto == null)
+            {
+                throw new ArgumentException("User registration data is missing.");
+            }
+
+            // Validate the password
+            if (!userDto.Password.Any(char.IsDigit))
+            {
+                throw new ArgumentException("Password must include at least one number.");
+            }
+
+            // Check if the username or email already exists
+            var existingUserByUsername = await _userManager.FindByNameAsync(userDto.Username);
+            var existingUserByEmail = await _userManager.FindByEmailAsync(userDto.Email);
+            if (existingUserByUsername != null)
+            {
+                throw new ArgumentException("Username already exists.");
+            }
+            if (existingUserByEmail != null)
+            {
+                throw new ArgumentException("Email already exists.");
+            }
+
+            // Set the default image URL
+            var defaultImageUrl = "https://api.realworld.io/images/smiley-cyrus.jpeg";
+
+            var user = new ApplicationUser
+            {
+                UserName = userDto.Username,
+                Email = userDto.Email,
+                Image = defaultImageUrl
+            };
+
+            var result = await _userManager.CreateAsync(user, userDto.Password);
 
             if (!result.Succeeded)
             {
-
-                throw new Exception("User registration failed.");
+                // Aggregate IdentityResult errors into a single exception message
+                var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+                throw new Exception($"User registration failed: {errors}");
             }
 
             // Generate a token for the registered user
             var token = await _tokenService.CreateToken(user);
+
+            // Return the UserDto including the default image URL
             return new UserDto
             {
                 UserName = user.UserName,
-                UserEmail = user.Email,
                 Email = user.Email,
                 Token = token,
-                ImageUrl = "https://api.realworld.io/images/smiley-cyrus.jpeg"
+                Image = user.Image
             };
         }
+
+
     }
 }

@@ -2,8 +2,8 @@
 
 namespace RealworldonetAPI.Domain.Contracts
 {
-    public class UserLoginRequest
+     public class UserUpdateRequest
     {
-        public LoginUserDto User { get; set; }
+        public UpdateUserDto? User { get; set; }
     }
 }

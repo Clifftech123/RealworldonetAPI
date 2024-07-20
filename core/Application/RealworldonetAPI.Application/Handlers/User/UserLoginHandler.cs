@@ -8,7 +8,7 @@ namespace RealworldonetAPI.Application.Commands.User
 {
     public class UserLogin : IRequest<object>
     {
-        public required LoginUserDto loginUserDto { get; set; }
+        public required LoginUserWrapper? loginUserDto { get; set; }
 
         public class UserLoginHandler : IRequestHandler<UserLogin, object>
         {
@@ -25,36 +25,39 @@ namespace RealworldonetAPI.Application.Commands.User
 
             public async Task<object> Handle(UserLogin request, CancellationToken cancellationToken)
             {
-                var user = await _userManager.FindByNameAsync(request.loginUserDto.Email);
-                if (user == null)
+                try
                 {
-                    _logger.LogWarn($"{nameof(UserLogin)}: Login failed for email {request.loginUserDto.Email}. " +
-                        "Incorrect credentials.");
-                    throw new Exception("Email or Password is incorrect");
-                }
 
-                   
-                var token = await _tokenService.CreateToken(user);
-                var response = new
-                {
-                    user = new
+                    var user = await _userManager.FindByEmailAsync(request.loginUserDto?.User.Email);
+
+                    if (user == null || !await _userManager.CheckPasswordAsync(user, request.loginUserDto?.User.Password))
                     {
-                        email = user.Email,
-                        username = user.UserName,
-                        bio = (string)null, 
-                        image = "https://api.realworld.io/images/smiley-cyrus.jpeg",
-                        token = token
+                        _logger.LogWarn($"{nameof(UserLogin)}: Login failed for email {request.loginUserDto?.User.Email}. Incorrect credentials.");
+                        return new { errors = new { body = new[] { "Email or Password is incorrect" } } };
                     }
-                };
 
-                return response;
+                    var token = await _tokenService.CreateToken(user);
+                    var response = new
+                    {
+                        user = new
+                        {
+                            id = user.Id,
+                            email = user.Email,
+                            username = user.UserName,
+                            bio = user.Bio,
+                            image = user.Image,
+                            token = token
+                        }
+                    };
+
+                    return response;
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError($"An error occurred in {nameof(UserLoginHandler)}: {ex.Message}");
+                    return new { errors = new { body = new[] { "An error occurred while processing your request." } } };
+                }
             }
-
         }
-
-
     }
 }
-
-
-

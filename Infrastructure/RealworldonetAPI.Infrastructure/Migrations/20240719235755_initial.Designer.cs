@@ -12,8 +12,8 @@ using RealworldonetAPI.Infrastructure.Context;
 namespace RealworldonetAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20240719101106_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20240719235755_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

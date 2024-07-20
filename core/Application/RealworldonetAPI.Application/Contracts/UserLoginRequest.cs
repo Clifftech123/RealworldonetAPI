@@ -2,8 +2,9 @@
 
 namespace RealworldonetAPI.Domain.Contracts
 {
-    public class UserRegistrationRequest
+    public class UserLoginRequest
     {
-        public UserRegisterDto User { get; set; }
+        public LoginUserDto? User { get; set; }
+
     }
 }

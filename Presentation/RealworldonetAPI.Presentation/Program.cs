@@ -1,7 +1,14 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog;
+using RealworldonetAPI.Application.Commands.User;
+using RealworldonetAPI.Application.Exceptions;
 using RealworldonetAPI.Application.Interface;
 using RealworldonetAPI.Application.Services;
+using RealworldonetAPI.Domain.Entities;
+using RealworldonetAPI.Infrastructure.Context;
+using RealworldonetAPI.Presentation.Extensions;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -63,10 +70,33 @@ builder.Services.AddSwaggerGen();
 // Register IHttpContextAccessor
 builder.Services.AddHttpContextAccessor();
 
-// Application services
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddDbContext<ApplicationContext>(o =>
+{
+    o.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"),
+        b => b.MigrationsAssembly("RealworldonetAPI.Infrastructure"));
+});
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<ApplicationContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddMediatR(m => m.RegisterServicesFromAssemblyContaining(typeof(RegisterUserHandler)));
+builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
+builder.Services.ConfigureCors(builder.Configuration);
+builder.Services.ConfigureIdentity();
+builder.Services.ConfigureJWT(builder.Configuration);
+
+
+
+
+// Registering Exception handling middleware
+
+// Adding of Exceptions handle 
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
+builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();
@@ -83,6 +113,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

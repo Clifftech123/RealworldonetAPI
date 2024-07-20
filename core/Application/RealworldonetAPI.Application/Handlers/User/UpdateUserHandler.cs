@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using RealworldonetAPI.Application.Interface;
 using RealworldonetAPI.Domain.DTO.user;
 using RealworldonetAPI.Domain.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace RealworldonetAPI.Application.Commands.User
 {
@@ -17,7 +18,6 @@ namespace RealworldonetAPI.Application.Commands.User
             _currentUser = currentUser;
         }
 
-        // Update user details and return the updated user details
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.GetUserId();
@@ -25,44 +25,66 @@ namespace RealworldonetAPI.Application.Commands.User
 
             if (user == null)
             {
-                throw new Exception("User not found.");
+                throw new KeyNotFoundException("User not found.");
             }
 
-            // Update user details
+            var updateUserDto = request.User.User;
 
-            var updateUserDto = request.User;
-            user.Email = updateUserDto.Email;
-            user.UserName = updateUserDto.Username;
-            user.Bio = updateUserDto.Bio;
-            user.Image = updateUserDto.Image;
+            // Update email if provided
+            if (!string.IsNullOrWhiteSpace(updateUserDto.Email))
+            {
+                user.Email = updateUserDto.Email ?? user.Email; 
+            }
+
+            // Update username if provided
+            if (!string.IsNullOrWhiteSpace(updateUserDto.Username))
+            {
+                user.UserName = updateUserDto.Username ?? user.UserName;
+            }
+
+            // Update bio if provided
+            if (!string.IsNullOrWhiteSpace(updateUserDto.Bio))
+            {
+                user.Bio = updateUserDto.Bio;
+            }
+
+            // Update image if provided
+            if (!string.IsNullOrWhiteSpace(updateUserDto.Image))
+            {
+                user.Image = updateUserDto.Image;
+            }
 
             var result = await _userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
             {
-                throw new Exception("Failed to update user.");
+                var errors = string.Join("; ", result.Errors.Select(e => e.Description));
+                throw new ValidationException($"Failed to update user: {errors}");
             }
 
-            // Update password if it's provided in the request
+            // Update password if provided
             if (!string.IsNullOrWhiteSpace(updateUserDto.Password))
             {
+                if (!updateUserDto.Password.Any(char.IsDigit))
+                {
+                    throw new ValidationException("Password must include at least one number.");
+                }
+
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var passwordResult = await _userManager.ResetPasswordAsync(user, token, updateUserDto.Password);
                 if (!passwordResult.Succeeded)
                 {
-                    throw new Exception("Failed to update password.");
+                    var passwordErrors = string.Join("; ", passwordResult.Errors.Select(e => e.Description));
+                    throw new ValidationException($"Failed to update password: {passwordErrors}");
                 }
             }
 
             return new UserDto
             {
-                UserName = user.UserName,
-                UserEmail = user.Email,
-                Email = user.Email,
+                UserName = user.UserName ?? string.Empty,
+                Email = user.Email ?? string.Empty,
+                Image = user.Image ?? "https://api.realworld.io/images/smiley-cyrus.jpeg"
             };
-
         }
-
-
     }
 }
