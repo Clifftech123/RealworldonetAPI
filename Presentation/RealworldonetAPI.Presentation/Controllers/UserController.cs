@@ -12,8 +12,6 @@ namespace RealworldonetAPI.Presentation.Controllers
     public class UserController : BaseApiController
     {
 
-
-
         // Login User Endpoint - POST /api/users/login
 
         /// <summary>
@@ -30,7 +28,6 @@ namespace RealworldonetAPI.Presentation.Controllers
 
             return Ok(await Mediator.Send(new UserLogin { loginUserDto = loginUserWrapper }));
         }
-
 
 
         [HttpPost("users")]
