@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using RealworldonetAPI.Application.DTO.user;
 using RealworldonetAPI.Application.Interface;
-using RealworldonetAPI.Domain.DTO.user;
 using RealworldonetAPI.Domain.Entities;
 
 namespace RealworldonetAPI.Application.Commands.User

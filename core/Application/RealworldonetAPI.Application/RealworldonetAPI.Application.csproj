@@ -21,12 +21,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Mapping\" />
+	  <ProjectReference Include="..\..\..\Infrastructure\RealworldonetAPI.Infrastructure\RealworldonetAPI.Infrastructure.csproj" />
+	  <ProjectReference Include="..\..\Domain\RealworldonetAPI.Domain\RealworldonetAPI.Domain.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\..\Infrastructure\RealworldonetAPI.Infrastructure\RealworldonetAPI.Infrastructure.csproj" />
-	  <ProjectReference Include="..\..\Domain\RealworldonetAPI.Domain\RealworldonetAPI.Domain.csproj" />
+	  <Folder Include="DTO\Profile\" />
 	</ItemGroup>
 
 </Project>

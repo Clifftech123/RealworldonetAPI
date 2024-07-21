@@ -5,6 +5,7 @@ using RealworldonetAPI.Application.Queries.User;
 using RealworldonetAPI.Domain.Contracts;
 using RealworldonetAPI.Domain.DTO.user;
 using RealworldonetAPI.Domain.DTO.user.RealworldonetAPI.Domain.DTO.user;
+using RealworldonetAPI.Domain.models;
 using RealworldonetAPI.Domain.models.User;
 
 namespace RealworldonetAPI.Presentation.Controllers
@@ -24,7 +25,7 @@ namespace RealworldonetAPI.Presentation.Controllers
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ErrorResponse))]
         public async Task<IActionResult> Login([FromBody] UserLoginRequest request)
         {
-            var loginUserWrapper = new LoginUserWrapper { User = request.User };
+            var loginUserWrapper = new Application.DTO.user.LoginUserWrapper { User = request.User };
 
             return Ok(await Mediator.Send(new UserLogin { loginUserDto = loginUserWrapper }));
         }
@@ -40,9 +41,9 @@ namespace RealworldonetAPI.Presentation.Controllers
         /// <returns>A response indicating the result of the registration operation.</returns>
         public async Task<IActionResult> RegisterUser([FromBody] UserRegisterWrapper request)
         {
-            var registerDto = request ?? new UserRegisterWrapper { User = new UserRegisterDto() };
+            var registerDto = request ?? new UserRegisterWrapper { User = new NewUser() };
 
-            var result = await Mediator.Send(new RegisterUserCommand { userdto = registerDto });
+            var result = await Mediator.Send(request: new RegisterUserCommand { userdto = registerDto });
 
             return Ok(result);
         }

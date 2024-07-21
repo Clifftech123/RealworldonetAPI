@@ -2,10 +2,10 @@
 {
     public class UpdateUserWrapper
     {
-        public UpdateUserDto User { get; set; }
+        public UpdateUser User { get; set; }
     }
 
-    public record UpdateUserDto
+    public record class UpdateUser
     {
         public string Email { get; set; }
         public string Password { get; set; }

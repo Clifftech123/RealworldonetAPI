@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using RealworldonetAPI.Application.Commands.User;
+using RealworldonetAPI.Application.Commands.UserHanlers;
 using RealworldonetAPI.Application.Interface;
 using RealworldonetAPI.Domain.DTO.user.RealworldonetAPI.Domain.DTO.user;
 using RealworldonetAPI.Domain.Entities;
@@ -32,7 +33,7 @@ namespace RealworldonetAPI.Tests.Handlers.User
             {
                 userdto = new UserRegisterWrapper
                 {
-                    User = new UserRegisterDto
+                    User = new NewUser
                     {
                         Username = "newUser",
                         Email = "new@example.com",
@@ -56,7 +57,7 @@ namespace RealworldonetAPI.Tests.Handlers.User
             result.Image.Should().Be("https://api.realworld.io/images/smiley-cyrus.jpeg");
         }
 
-        
+
 
 
 

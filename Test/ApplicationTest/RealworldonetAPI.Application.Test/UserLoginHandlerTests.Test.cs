@@ -58,7 +58,7 @@ namespace RealworldonetAPI.Tests.Handlers.User
             {
                 loginUserDto = new LoginUserWrapper
                 {
-                    User = new LoginUserDto
+                    User = new LoginUser
                     {
                         Email = user.Email,
                         Password = "TestPassword"
@@ -89,7 +89,7 @@ namespace RealworldonetAPI.Tests.Handlers.User
             });
         }
 
-         // Test for UserLoginHandler
+        // Test for UserLoginHandler
 
         [Fact]
         public async Task Handle_GivenInvalidCredentials_ShouldReturnError()
@@ -99,7 +99,7 @@ namespace RealworldonetAPI.Tests.Handlers.User
             {
                 loginUserDto = new LoginUserWrapper
                 {
-                    User = new LoginUserDto
+                    User = new LoginUser
                     {
                         Email = "wrong@example.com",
                         Password = "WrongPassword"

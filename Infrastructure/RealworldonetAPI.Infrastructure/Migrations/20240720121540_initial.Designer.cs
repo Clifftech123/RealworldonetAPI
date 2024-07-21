@@ -11,8 +11,8 @@ using RealworldonetAPI.Infrastructure.Context;
 
 namespace RealworldonetAPI.Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
-    [Migration("20240719235755_initial")]
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20240720121540_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -230,6 +230,75 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "eos"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "est"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "ipsum"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Name = "enim"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Name = "repellat"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Name = "exercitationem"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Name = "quia"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Name = "consequatur"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Name = "facilis"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Name = "tenetur"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

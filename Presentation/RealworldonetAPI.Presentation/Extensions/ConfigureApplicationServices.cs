@@ -29,7 +29,7 @@ namespace RealworldonetAPI.Presentation.Extensions
                 o.Password.RequireLowercase = true;
                 o.Password.RequireUppercase = false;
                 o.Password.RequiredLength = 8;
-            }).AddEntityFrameworkStores<ApplicationContext>()
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
         }
 
