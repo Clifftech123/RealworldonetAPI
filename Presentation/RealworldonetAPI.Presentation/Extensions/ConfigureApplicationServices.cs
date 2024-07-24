@@ -15,7 +15,7 @@ namespace RealworldonetAPI.Presentation.Extensions
                 .AllowAnyMethod()
                 .AllowAnyHeader()));
         }
-
+ 
 
         // Configure identity options for better security and user management
 

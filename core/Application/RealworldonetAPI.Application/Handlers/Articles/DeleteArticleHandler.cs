@@ -6,10 +6,10 @@ namespace RealworldonetAPI.Application.Handlers.Article
 {
     public class DeleteArticleHandler : IRequestHandler<DeleteArticleCommand, bool>
     {
-         private readonly IArticleRepository _articleRepository;
+        private readonly IArticleRepository _articleRepository;
 
         public DeleteArticleHandler(IArticleRepository articleRepository)
-            {
+        {
             _articleRepository = articleRepository;
         }
         public async Task<bool> Handle(DeleteArticleCommand request, CancellationToken cancellationToken)
@@ -19,12 +19,12 @@ namespace RealworldonetAPI.Application.Handlers.Article
 
             if (existingArticle == null)
             {
-                throw new Exception ("Artticel not found ");
+                throw new Exception("Artticel not found ");
             }
             await _articleRepository.DeleteBySlugAsync(request.Slug);
             return true;
 
-            
+
 
         }
     }

@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Moq;
 using RealworldonetAPI.Application.Commands.User;
-using RealworldonetAPI.Application.Commands.UserHanlers;
 using RealworldonetAPI.Application.Interface;
 using RealworldonetAPI.Domain.DTO.user.RealworldonetAPI.Domain.DTO.user;
 using RealworldonetAPI.Domain.Entities;

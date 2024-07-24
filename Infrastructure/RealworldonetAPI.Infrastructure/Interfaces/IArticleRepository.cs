@@ -5,14 +5,13 @@ namespace RealworldonetAPI.Infrastructure.Interfaces
     public interface IArticleRepository
     {
         // Create an article
-
         Task<Article> CreateAsync(Article article);
 
         // Get recent articles from users you follow
-        Task<List<Article>> GetFeedAsync(int pageNumber, int pageSize);
+        Task<List<Article>> GetFeedAsync(int offset, int limit);
 
-        // Get recent articles globally
-        Task<List<Article>> GetGlobalAsync(int pageNumber, int pageSize);
+        // Updated GetGlobalAsync method signature with optional parameters and default values
+        Task<List<Article>> GetGlobalAsync(string? tag = null, string? author = null, string? favorited = null, int offset = 1, int limit = 20);
 
         // Get an article by slug
         Task<Article> GetBySlugAsync(string slug);
@@ -22,5 +21,8 @@ namespace RealworldonetAPI.Infrastructure.Interfaces
 
         // Delete an article by slug
         Task<Article> DeleteBySlugAsync(string slug);
+
+
+        Task<int> GetTotalCountAsync();
     }
 }

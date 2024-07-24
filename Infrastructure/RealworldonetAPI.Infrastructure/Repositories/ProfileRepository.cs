@@ -13,7 +13,7 @@ public class ProfileRepository : IProfileRepository
         _context = context;
     }
 
-     // Get a user's profile
+    // Get a user's profile
     public async Task<UserProfile> GetProfileAsync(string username)
     {
         var user = await _context.Users
@@ -83,4 +83,6 @@ public class ProfileRepository : IProfileRepository
         await _context.SaveChangesAsync();
         return true;
     }
+
+
 }

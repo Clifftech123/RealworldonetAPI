@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog;
 using RealworldonetAPI.Application.Commands.User;
-using RealworldonetAPI.Application.Exceptions;
 using RealworldonetAPI.Application.Interface;
 using RealworldonetAPI.Application.Mapping;
 using RealworldonetAPI.Application.Services;
@@ -11,6 +10,7 @@ using RealworldonetAPI.Domain.Entities;
 using RealworldonetAPI.Infrastructure.Context;
 using RealworldonetAPI.Infrastructure.Interfaces;
 using RealworldonetAPI.Infrastructure.Repositories;
+using RealworldonetAPI.Presentation.Exceptions.Handlers;
 using RealworldonetAPI.Presentation.Extensions;
 using System.Reflection;
 
@@ -78,6 +78,8 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ILoggerManager, LoggerManager>();
 builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
 builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<IFavoritesRepository, FavoritesRepository>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
 builder.Services.AddDbContext<ApplicationDbContext>(o =>

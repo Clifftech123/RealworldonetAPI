@@ -22,6 +22,53 @@ namespace RealworldonetAPI.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ArticleTag", b =>
+                {
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ArticleId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("ArticleTag");
+
+                    b.HasData(
+                        new
+                        {
+                            ArticleId = new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"),
+                            TagId = 1
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"),
+                            TagId = 2
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("f439da89-c2bb-4ce4-824f-4d96e553c630"),
+                            TagId = 3
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("a1c65cbe-b754-4b77-b977-5ebf2bdaf76d"),
+                            TagId = 4
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("26214f52-95fc-44c4-9717-aa9d4b1f7a7b"),
+                            TagId = 5
+                        },
+                        new
+                        {
+                            ArticleId = new Guid("409f179f-8943-414a-9de7-a04ce937e503"),
+                            TagId = 1
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -218,6 +265,10 @@ namespace RealworldonetAPI.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasFilter("[Email] IS NOT NULL");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -227,6 +278,171 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "66adc0ae-6faa-43d1-bb4e-e00c843beb34",
+                            Email = "seeduser@example.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "b6a1f701-d750-42a6-8a53-025bbba45054",
+                            TwoFactorEnabled = false,
+                            UserName = "seeduser@example.com"
+                        });
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Article", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slug")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("Slug")
+                        .IsUnique();
+
+                    b.ToTable("Articles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"),
+                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
+                            Body = "Body 1",
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6576), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Description 1",
+                            Slug = "first-global-article",
+                            Title = "First Global Article",
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6577), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = new Guid("f439da89-c2bb-4ce4-824f-4d96e553c630"),
+                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
+                            Body = "Body 2",
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6609), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Description 2",
+                            Slug = "second-global-article",
+                            Title = "Second Global Article",
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6609), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = new Guid("a1c65cbe-b754-4b77-b977-5ebf2bdaf76d"),
+                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
+                            Body = "Body 3",
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6632), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Description 3",
+                            Slug = "third-global-article",
+                            Title = "Third Global Article",
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6633), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = new Guid("26214f52-95fc-44c4-9717-aa9d4b1f7a7b"),
+                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
+                            Body = "Body 4",
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6656), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Description 4",
+                            Slug = "fourth-global-article",
+                            Title = "Fourth Global Article",
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6657), new TimeSpan(0, 0, 0, 0, 0))
+                        },
+                        new
+                        {
+                            Id = new Guid("409f179f-8943-414a-9de7-a04ce937e503"),
+                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
+                            Body = "Body 5",
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6688), new TimeSpan(0, 0, 0, 0, 0)),
+                            Description = "Description 5",
+                            Slug = "fifth-global-article",
+                            Title = "Fifth Global Article",
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6689), new TimeSpan(0, 0, 0, 0, 0))
+                        });
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.ArticleFavorite", b =>
+                {
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("ArticleId", "Username");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ArticleFavorites");
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Comment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ArticleId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Body")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<DateTimeOffset>("UpdatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ArticleId");
+
+                    b.HasIndex("Username");
+
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Tag", b =>
@@ -249,53 +465,58 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "eos"
+                            Name = "programming"
                         },
                         new
                         {
                             Id = 2,
-                            Name = "est"
+                            Name = "javascript"
                         },
                         new
                         {
                             Id = 3,
-                            Name = "ipsum"
+                            Name = "react"
                         },
                         new
                         {
                             Id = 4,
-                            Name = "enim"
+                            Name = "angular"
                         },
                         new
                         {
                             Id = 5,
-                            Name = "repellat"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "exercitationem"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "quia"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "consequatur"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "facilis"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "tenetur"
+                            Name = "vue"
                         });
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.UserLink", b =>
+                {
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FollowerUsername")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Username", "FollowerUsername");
+
+                    b.HasIndex("FollowerUsername");
+
+                    b.ToTable("UserLinks");
+                });
+
+            modelBuilder.Entity("ArticleTag", b =>
+                {
+                    b.HasOne("RealworldonetAPI.Domain.Entities.Article", null)
+                        .WithMany()
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RealworldonetAPI.Domain.Entities.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -347,6 +568,94 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Article", b =>
+                {
+                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "Author")
+                        .WithMany("Articles")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.ArticleFavorite", b =>
+                {
+                    b.HasOne("RealworldonetAPI.Domain.Entities.Article", "Article")
+                        .WithMany("ArticleFavorites")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("ArticleFavorites")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Comment", b =>
+                {
+                    b.HasOne("RealworldonetAPI.Domain.Entities.Article", "Article")
+                        .WithMany("Comments")
+                        .HasForeignKey("ArticleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "Author")
+                        .WithMany("ArticleComments")
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Article");
+
+                    b.Navigation("Author");
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.UserLink", b =>
+                {
+                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "FollowerUser")
+                        .WithMany("FollowedUsers")
+                        .HasForeignKey("FollowerUsername")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("Followers")
+                        .HasForeignKey("Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FollowerUser");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.ApplicationUser", b =>
+                {
+                    b.Navigation("ArticleComments");
+
+                    b.Navigation("ArticleFavorites");
+
+                    b.Navigation("Articles");
+
+                    b.Navigation("FollowedUsers");
+
+                    b.Navigation("Followers");
+                });
+
+            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Article", b =>
+                {
+                    b.Navigation("ArticleFavorites");
+
+                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

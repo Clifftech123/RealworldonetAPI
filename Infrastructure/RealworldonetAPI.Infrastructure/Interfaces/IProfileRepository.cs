@@ -1,4 +1,5 @@
-﻿using RealworldonetAPI.Application.DTO.user;
+﻿
+using RealworldonetAPI.Application.DTO.user;
 
 namespace RealworldonetAPI.Infrastructure.Interfaces
 {

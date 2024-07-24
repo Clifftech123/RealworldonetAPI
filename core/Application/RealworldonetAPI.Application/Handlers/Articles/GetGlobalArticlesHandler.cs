@@ -6,10 +6,11 @@ using RealworldonetAPI.Infrastructure.Interfaces;
 
 namespace RealworldonetAPI.Application.Handlers.Article
 {
-    public class GetGlobalArticlesHandler : IRequestHandler<GetGlobalArticlesQuery, ArticleResponseDto>
+    public class GetGlobalArticlesHandler : IRequestHandler<GetGlobalArticlesQuery, ArticlesResponseWrapper>
     {
         private readonly IArticleRepository _articleRepository;
-         readonly IMapper _mapper;
+        private readonly IMapper _mapper;
+
 
         public GetGlobalArticlesHandler(IArticleRepository articleRepository, IMapper mapper)
         {
@@ -17,12 +18,23 @@ namespace RealworldonetAPI.Application.Handlers.Article
             _mapper = mapper;
         }
 
-        public async Task<ArticleResponseDto> Handle(GetGlobalArticlesQuery request, CancellationToken cancellationToken)
+        public async Task<ArticlesResponseWrapper> Handle(GetGlobalArticlesQuery request, CancellationToken cancellationToken)
         {
+            var articles = await _articleRepository.GetGlobalAsync(
+                tag: request.Tag,
+                author: request.Author,
+                favorited: request.Favorited,
+                offset: request.PageNumber,
+                limit: request.PageSize);
 
-          var articles = await _articleRepository.GetGlobalAsync(request.PageNumber, request.PageSize);
-            var articleResponseDto = _mapper.Map<ArticleResponseDto>(articles);
+            var articleResponseDto = new ArticlesResponseWrapper
+            {
+                Articles = _mapper.Map<List<ArticleResponseDto>>(articles),
+                ArticlesCount = articles.Count
+            };
+
             return articleResponseDto;
         }
     }
+
 }

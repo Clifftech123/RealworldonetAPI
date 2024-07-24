@@ -3,16 +3,18 @@ using RealworldonetAPI.Application.DTO.article;
 
 namespace RealworldonetAPI.Application.Queries.Article
 {
-     public class GetArticlesFeedQuery : IRequest<ArticleResponseDto>
+    public class GetArticlesFeedQuery : IRequest<ArticlesResponseWrapper>
     {
-        public int PageNumber { get; }
-        public int PageSize { get; }
+        public int Offset { get; } = 1;
+        public int Limit { get; } = 20;
 
-        public GetArticlesFeedQuery(int pageNumber, int pageSize)
+        public GetArticlesFeedQuery(int offset, int limit)
         {
-            PageNumber = pageNumber;
-            PageSize = pageSize;
+            Offset = offset;
+            Limit = limit;
         }
     }
+
+
+
 }
- 

@@ -1,6 +1,6 @@
 ﻿namespace RealworldonetAPI.Application.DTO.user
 {
-    public class UserProfile
+    public record UserProfiledto
     {
         public string Username { get; set; }
         public string Password { get; set; }

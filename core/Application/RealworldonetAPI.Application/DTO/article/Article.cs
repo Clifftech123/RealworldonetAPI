@@ -1,37 +1,70 @@
-﻿using RealworldonetAPI.Domain.Entities;
-
-namespace RealworldonetAPI.Application.DTO.article
+﻿namespace RealworldonetAPI.Application.DTO.article
 {
-    public class NewArticleDto
+
+
+    public record NewArticleDto
+    {
+        public string Title { get; init; }
+        public string Description { get; init; }
+        public string Body { get; init; }
+        public List<string> TagList { get; init; }
+    }
+
+
+
+    public record CreateArticleRequestDto
+    {
+        public NewArticleDto Article { get; init; }
+    }
+
+
+
+    public record UpdateArticleDto
     {
         public string Title { get; set; }
         public string Description { get; set; }
         public string Body { get; set; }
-        public List<string> TagList { get; set; }
     }
 
-    public class UpdateArticleDto
+
+    public record ArticleResponseDto
     {
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string Body { get; set; }
+        public string Slug { get; init; }
+        public string Title { get; init; }
+        public string Description { get; init; }
+        public string Body { get; init; }
+        public List<string> TagList { get; init; }
+        public DateTimeOffset CreatedAt { get; init; }
+        public DateTimeOffset UpdatedAt { get; init; }
+        public bool Favorited { get; init; }
+        public int FavoritesCount { get; init; }
+        public AuthorDto Author { get; init; }
     }
 
-    public class ArticleResponseDto
+
+    public record AuthorDto
     {
-        public string Slug { get; set; }
-        public string Title { get; set; }
-        public string Description { get; set; }
-        public string Body { get; set; }
-        public List<string> TagList { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
-        public bool Favorited { get; set; }
-        public int FavoritesCount { get; set; }
-        public ApplicationUser Author { get; set; }
+        public string Username { get; init; }
+        public string? Bio { get; init; }
+        public string? Image { get; init; }
+        public bool Following { get; init; }
     }
 
-    
+
+    public record ArticleResponseWrapper
+    {
+        public ArticleResponseDto Article { get; init; }
+    }
+
+
+
+    public record ArticlesResponseWrapper
+    {
+        public List<ArticleResponseDto> Articles { get; init; }
+        public int ArticlesCount { get; init; }
+    }
+
+
 
 }
 

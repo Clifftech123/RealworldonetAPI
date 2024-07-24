@@ -30,7 +30,7 @@ namespace RealworldonetAPI.Application.Commands.User
             // Validate the password
             if (!userDto.Password.Any(char.IsDigit))
             {
-                throw new ArgumentException("Password must include at least one number.");
+                throw new ArgumentException("Password must include at least one number");
             }
 
             // Check if the username or email already exists

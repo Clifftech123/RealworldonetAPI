@@ -7,39 +7,75 @@ namespace RealworldonetAPI.Infrastructure.Context
     {
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Article> Articles { get; set; }
-        public DbSet<UserLink> UserLinks { get; set; } 
+        public DbSet<UserLink> UserLinks { get; set; }
+
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<ArticleFavorite> ArticleFavorites { get; set; } = null!;
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(builder);
 
-            // Article-Author relationship
-            builder.Entity<Article>()
-                .HasOne(a => a.Author)
-                .WithMany()
-                .HasForeignKey(a => a.AuthorId);
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ApplicationUser>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Email).IsUnique();
+                entity.HasMany(x => x.ArticleComments)
+                    .WithOne(x => x.Author);
 
-            // UserLink relationships
-            builder.Entity<UserLink>()
-                .HasKey(ul => new { ul.Username, ul.FollowerUsername }); 
+            });
 
-            builder.Entity<UserLink>()
-                .HasOne(ul => ul.User)
-                .WithMany()
-                .HasForeignKey(ul => ul.Username)
-                .OnDelete(DeleteBehavior.Cascade); 
+            modelBuilder.Entity<Article>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasIndex(e => e.Slug).IsUnique();
+                entity.Ignore(e => e.Favorited);
+                entity.Ignore(e => e.FavoritesCount);
+                entity.HasOne(a => a.Author)
+                    .WithMany(a => a.Articles)
+                    .HasForeignKey(a => a.AuthorId)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
 
-            builder.Entity<UserLink>()
-                .HasOne(ul => ul.FollowerUser)
-                .WithMany()
-                .HasForeignKey(ul => ul.FollowerUsername)
-                .OnDelete(DeleteBehavior.Cascade); 
 
-            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
+            modelBuilder.Entity<ArticleFavorite>(entity =>
+            {
+                entity.HasKey(e => new { e.ArticleId, UserId = e.Username });
+                entity.HasOne(x => x.Article).WithMany(x => x.ArticleFavorites)
+                    .HasForeignKey(x => x.ArticleId);
+                entity.HasOne(x => x.User).WithMany(x => x.ArticleFavorites);
+            });
+
+            modelBuilder.Entity<Comment>(entity =>
+             {
+                 entity.HasKey(e => e.Id);
+                 entity.HasOne(x => x.Article)
+                   .WithMany(x => x.Comments)
+                    .HasForeignKey(x => x.ArticleId);
+                 entity.HasOne(x => x.Author)
+                .WithMany(x => x.ArticleComments)
+                .HasForeignKey(x => x.Username);
+             });
+
+            modelBuilder.Entity<UserLink>(entity =>
+            {
+                entity.HasKey(x => new { x.Username, x.FollowerUsername });
+                entity.HasOne(x => x.User)
+                    .WithMany(x => x.Followers)
+                    .HasForeignKey(x => x.Username)
+                     .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(x => x.FollowerUser)
+                    .WithMany(x => x.FollowedUsers)
+                    .HasForeignKey(x => x.FollowerUsername)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+            });
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
 }

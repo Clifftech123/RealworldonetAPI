@@ -1,37 +1,38 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using RealworldonetAPI.Application.Commands.Article;
 using RealworldonetAPI.Application.DTO.article;
 using RealworldonetAPI.Application.Queries.Article;
 
 namespace RealworldonetAPI.Presentation.Controllers
 {
-    public class ArticleController : BaseApiController
+    public class ArticlesController : BaseApiController
     {
 
         // Get article  feed 
 
         [HttpGet(" article/feed")]
-
-        public async Task<IActionResult> GetArticleFeed([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        [Authorize]
+        public async Task<IActionResult> GetArticleFeed([FromQuery] int offset = 1, [FromQuery] int limit = 20)
         {
-            return Ok(await Mediator.Send(new GetArticlesFeedQuery(pageNumber, pageSize)));
+            return Ok(await Mediator.Send(new GetArticlesFeedQuery(offset, limit)));
         }
 
-
-
-        [HttpGet(" article")]
-        public async Task<IActionResult> GetArticeGobalFeed([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        [HttpGet("article")]
+        public async Task<IActionResult> GetArticleGlobalFeed([FromQuery] string? tag = null, [FromQuery] string? author = null, [FromQuery] string? favorited = null, [FromQuery] int offset = 1, [FromQuery] int limit = 20)
         {
-            return Ok(await Mediator.Send(new GetGlobalArticlesQuery(pageNumber, pageSize)));
+            return Ok(await Mediator.Send(new GetGlobalArticlesQuery(tag, author, favorited, offset, limit)));
         }
 
 
         [HttpPost(" article")]
-
-        public async Task<IActionResult> CreateArticle([FromBody] NewArticleDto newArticleDto)
+        public async Task<ActionResult<ArticleResponseWrapper>> CreateArticle([FromBody] CreateArticleRequestDto request)
         {
-            return Ok(await Mediator.Send(new CreateArticleCommand(newArticleDto)));
+            var command = new CreateArticleCommand(request.Article);
+            var result = await Mediator.Send(command);
+            return Ok(result);
         }
+
 
         // Get article by slug
 
