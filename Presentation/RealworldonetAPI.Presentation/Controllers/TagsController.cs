@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RealworldonetAPI.Application.Queries.Tags;
-using RealworldonetAPI.Domain.Entities;
 using RealworldonetAPI.Domain.models;
 
 namespace RealworldonetAPI.Presentation.Controllers
@@ -20,7 +19,6 @@ namespace RealworldonetAPI.Presentation.Controllers
         // Get all tags from the database
 
         [HttpGet("tags")]
-        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(Tag))]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity, Type = typeof(ErrorResponse))]
         public async Task<ActionResult> Get()
         {

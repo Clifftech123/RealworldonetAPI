@@ -62,6 +62,7 @@
     {
         public List<ArticleResponseDto> Articles { get; init; }
         public int ArticlesCount { get; init; }
+       
     }
 
 

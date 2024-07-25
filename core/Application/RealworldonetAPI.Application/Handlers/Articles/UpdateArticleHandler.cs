@@ -6,17 +6,33 @@ using RealworldonetAPI.Infrastructure.Interfaces;
 
 namespace RealworldonetAPI.Application.Handlers.Article
 {
+    /// <summary>
+    /// Handles the update of an article.
+    /// </summary>
     public class UpdateArticleHandler : IRequestHandler<UpdateArticleCommand, ArticleResponseDto>
     {
         private readonly IArticleRepository _articleRepository;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateArticleHandler"/> class.
+        /// </summary>
+        /// <param name="articleRepository">The repository for managing articles.</param>
+        /// <param name="mapper">The mapper for converting between entities and DTOs.</param>
         public UpdateArticleHandler(IArticleRepository articleRepository, IMapper mapper)
         {
             _articleRepository = articleRepository;
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Handles the update of an article.
+        /// </summary>
+        /// <param name="request">The command containing the details of the article to update.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>The details of the updated article.</returns>
+        /// <exception cref="KeyNotFoundException">Thrown when the article is not found.</exception>
+        /// <exception cref="InvalidOperationException">Thrown when an error occurs during the update process.</exception>
         public async Task<ArticleResponseDto> Handle(UpdateArticleCommand request, CancellationToken cancellationToken)
         {
             try

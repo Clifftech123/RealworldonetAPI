@@ -18,11 +18,13 @@ namespace RealworldonetAPI.Application.Mapping
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             CreateMap<ApplicationUser, UserProfiledto>()
-                .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.UserName))
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
-                .ForMember(dest => dest.Bio, opt => opt.MapFrom(src => src.Bio))
-                .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
-                .ForMember(dest => dest.Following, opt => opt.MapFrom(src => src.following));
+  .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.UserName))
+  .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email))
+  .ForMember(dest => dest.Bio, opt => opt.MapFrom(src => src.Bio))
+  .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image))
+  .ForMember(dest => dest.Following, opt => opt.Ignore())
+  .ForMember(dest => dest.Password, opt => opt.Ignore());
+
 
             CreateMap<ApplicationUser, AuthorDto>()
                 .ForMember(dest => dest.Username, opt => opt.MapFrom(src => src.UserName))
@@ -38,6 +40,11 @@ namespace RealworldonetAPI.Application.Mapping
                 .ForMember(dest => dest.TagList, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name).ToList()))
                 .ForMember(dest => dest.FavoritesCount, opt => opt.MapFrom(src => src.ArticleFavorites.Count))
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author));
+
+            CreateMap<ArticleFavorite, ArticleResponseDto>()
+                .IncludeMembers(src => src.Article)
+                .ForMember(dest => dest.Favorited, opt => opt.MapFrom((src, dest, _, context) => true))
+                .ForMember(dest => dest.FavoritesCount, opt => opt.MapFrom(src => src.Article.ArticleFavorites.Count));
 
             CreateMap<Comment, CommentDetailDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

@@ -1,15 +1,16 @@
 ﻿namespace RealworldonetAPI.Domain.Entities
 {
-
-
-    public class ArticleFavorite(string username, Guid articleId)
+    public record ArticleFavorite
     {
-        public string Username { get; set; } = username;
+        public Guid ArticleId { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
+        public Article Article { get; set; }
 
-        public Guid ArticleId { get; set; } = articleId;
-
-        public ApplicationUser User { get; set; } = null!;
-
-        public Article Article { get; set; } = null!;
+        public ArticleFavorite(string userId, Guid articleId)
+        {
+            UserId = userId;
+            ArticleId = articleId;
+        }
     }
 }

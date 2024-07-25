@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace RealworldonetAPI.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -199,39 +197,38 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserLinks",
+                name: "UserFollowers",
                 columns: table => new
                 {
-                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    FollowerUsername = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    FollowedUsersId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FollowersId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserLinks", x => new { x.Username, x.FollowerUsername });
+                    table.PrimaryKey("PK_UserFollowers", x => new { x.FollowedUsersId, x.FollowersId });
                     table.ForeignKey(
-                        name: "FK_UserLinks_AspNetUsers_FollowerUsername",
-                        column: x => x.FollowerUsername,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_UserLinks_AspNetUsers_Username",
-                        column: x => x.Username,
+                        name: "FK_UserFollowers_AspNetUsers_FollowedUsersId",
+                        column: x => x.FollowedUsersId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_UserFollowers_AspNetUsers_FollowersId",
+                        column: x => x.FollowersId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "ArticleFavorites",
                 columns: table => new
                 {
-                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ArticleFavorites", x => new { x.ArticleId, x.Username });
+                    table.PrimaryKey("PK_ArticleFavorites", x => new { x.ArticleId, x.UserId });
                     table.ForeignKey(
                         name: "FK_ArticleFavorites_Articles_ArticleId",
                         column: x => x.ArticleId,
@@ -250,21 +247,21 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 name: "ArticleTag",
                 columns: table => new
                 {
-                    ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    TagId = table.Column<int>(type: "int", nullable: false)
+                    ArticlesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TagsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ArticleTag", x => new { x.ArticleId, x.TagId });
+                    table.PrimaryKey("PK_ArticleTag", x => new { x.ArticlesId, x.TagsId });
                     table.ForeignKey(
-                        name: "FK_ArticleTag_Articles_ArticleId",
-                        column: x => x.ArticleId,
+                        name: "FK_ArticleTag_Articles_ArticlesId",
+                        column: x => x.ArticlesId,
                         principalTable: "Articles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ArticleTag_Tags_TagId",
-                        column: x => x.TagId,
+                        name: "FK_ArticleTag_Tags_TagsId",
+                        column: x => x.TagsId,
                         principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -298,48 +295,6 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.InsertData(
-                table: "AspNetUsers",
-                columns: new[] { "Id", "AccessFailedCount", "Bio", "ConcurrencyStamp", "Email", "EmailConfirmed", "Image", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Token", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", 0, null, "c4dc1832-1295-4339-b964-49dcbb6663b4", "seeduser@example.com", false, null, false, null, null, null, null, null, false, "dece851b-1d22-404d-8ea0-75e9d87df41f", null, false, "seeduser@example.com" });
-
-            migrationBuilder.InsertData(
-                table: "Tags",
-                columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "programming" },
-                    { 2, "javascript" },
-                    { 3, "react" },
-                    { 4, "angular" },
-                    { 5, "vue" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Articles",
-                columns: new[] { "Id", "AuthorId", "Body", "CreatedAt", "Description", "Slug", "Title", "UpdatedAt" },
-                values: new object[,]
-                {
-                    { new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 1", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(874), new TimeSpan(0, 0, 0, 0, 0)), "Description 1", "first-global-article", "First Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(876), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 3", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0)), "Description 3", "third-global-article", "Third Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 5", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(972), new TimeSpan(0, 0, 0, 0, 0)), "Description 5", "fifth-global-article", "Fifth Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(973), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 4", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0)), "Description 4", "fourth-global-article", "Fourth Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 2", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(902), new TimeSpan(0, 0, 0, 0, 0)), "Description 2", "second-global-article", "Second Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(903), new TimeSpan(0, 0, 0, 0, 0)) }
-                });
-
-            migrationBuilder.InsertData(
-                table: "ArticleTag",
-                columns: new[] { "ArticleId", "TagId" },
-                values: new object[,]
-                {
-                    { new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"), 1 },
-                    { new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"), 2 },
-                    { new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"), 4 },
-                    { new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"), 1 },
-                    { new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"), 5 },
-                    { new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"), 3 }
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_ArticleFavorites_UserId",
                 table: "ArticleFavorites",
@@ -357,9 +312,9 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ArticleTag_TagId",
+                name: "IX_ArticleTag_TagsId",
                 table: "ArticleTag",
-                column: "TagId");
+                column: "TagsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -418,9 +373,9 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserLinks_FollowerUsername",
-                table: "UserLinks",
-                column: "FollowerUsername");
+                name: "IX_UserFollowers_FollowersId",
+                table: "UserFollowers",
+                column: "FollowersId");
         }
 
         /// <inheritdoc />
@@ -451,7 +406,7 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "UserLinks");
+                name: "UserFollowers");
 
             migrationBuilder.DropTable(
                 name: "Tags");

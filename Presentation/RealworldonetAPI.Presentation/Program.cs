@@ -24,7 +24,7 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 // Configure Swagger to include Bearer token input
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealWorld API", Version = "v1", Description = "JWT Authentication" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealWorld API", Version = "v1", Description = "Real Word API Sample" });
 
 
     // Set the comments path for the Swagger JSON and UI.

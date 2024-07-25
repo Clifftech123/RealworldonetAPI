@@ -14,10 +14,10 @@ namespace RealworldonetAPI.Domain.Entities
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
         public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
         public bool Favorited { get; set; }
-        public int FavoritesCount { get; set; } = 0;
+        public int FavoritesCount { get; set; }
         public ICollection<Tag> Tags { get; set; } = new List<Tag>();
         public List<Comment> Comments { get; set; } = new();
-        public ICollection<ArticleFavorite> ArticleFavorites { get; set; } = new List<ArticleFavorite>();
+        public ICollection<ArticleFavorite> ArticleFavorites { get; set; }
 
         // Parameterless constructor
         public Article() { }

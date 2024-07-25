@@ -12,6 +12,7 @@ namespace RealworldonetAPI.Application.Commands.Favorites
         {
             Slug = slug;
 
+
         }
     }
 }

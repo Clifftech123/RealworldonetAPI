@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using RealworldonetAPI.Domain.Entities;
+
 namespace RealworldonetAPI.Infrastructure.Context
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Article> Articles { get; set; }
-        public DbSet<UserLink> UserLinks { get; set; }
-
         public DbSet<Comment> Comments { get; set; }
         public DbSet<ArticleFavorite> ArticleFavorites { get; set; } = null!;
 
@@ -18,8 +17,8 @@ namespace RealworldonetAPI.Infrastructure.Context
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
             base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<ApplicationUser>(entity =>
             {
                 entity.HasKey(e => e.Id);
@@ -27,6 +26,9 @@ namespace RealworldonetAPI.Infrastructure.Context
                 entity.HasMany(x => x.ArticleComments)
                     .WithOne(x => x.Author);
 
+                entity.HasMany(e => e.Followers)
+                    .WithMany(e => e.FollowedUsers)
+                    .UsingEntity(j => j.ToTable("UserFollowers"));
             });
 
             modelBuilder.Entity<Article>(entity =>
@@ -41,41 +43,27 @@ namespace RealworldonetAPI.Infrastructure.Context
                     .OnDelete(DeleteBehavior.Restrict);
             });
 
-
             modelBuilder.Entity<ArticleFavorite>(entity =>
             {
-                entity.HasKey(e => new { e.ArticleId, UserId = e.Username });
-                entity.HasOne(x => x.Article).WithMany(x => x.ArticleFavorites)
+                entity.HasKey(e => new { e.ArticleId, e.UserId });
+                entity.HasOne(x => x.Article)
+                    .WithMany(x => x.ArticleFavorites)
                     .HasForeignKey(x => x.ArticleId);
-                entity.HasOne(x => x.User).WithMany(x => x.ArticleFavorites);
+                entity.HasOne(x => x.User)
+                    .WithMany(x => x.ArticleFavorites)
+                    .HasForeignKey(x => x.UserId);
             });
 
             modelBuilder.Entity<Comment>(entity =>
-             {
-                 entity.HasKey(e => e.Id);
-                 entity.HasOne(x => x.Article)
-                   .WithMany(x => x.Comments)
-                    .HasForeignKey(x => x.ArticleId);
-                 entity.HasOne(x => x.Author)
-                .WithMany(x => x.ArticleComments)
-                  .HasForeignKey(c => c.AuthorId);
-             });
-
-            modelBuilder.Entity<UserLink>(entity =>
             {
-                entity.HasKey(x => new { x.Username, x.FollowerUsername });
-                entity.HasOne(x => x.User)
-                    .WithMany(x => x.Followers)
-                    .HasForeignKey(x => x.Username)
-                     .OnDelete(DeleteBehavior.Cascade);
-
-                entity.HasOne(x => x.FollowerUser)
-                    .WithMany(x => x.FollowedUsers)
-                    .HasForeignKey(x => x.FollowerUsername)
-                    .OnDelete(DeleteBehavior.NoAction);
-
+                entity.HasKey(e => e.Id);
+                entity.HasOne(x => x.Article)
+                    .WithMany(x => x.Comments)
+                    .HasForeignKey(x => x.ArticleId);
+                entity.HasOne(x => x.Author)
+                    .WithMany(x => x.ArticleComments)
+                    .HasForeignKey(c => c.AuthorId);
             });
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
     }
 }

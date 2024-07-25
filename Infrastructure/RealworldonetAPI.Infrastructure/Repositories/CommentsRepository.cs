@@ -5,15 +5,30 @@ using RealworldonetAPI.Infrastructure.Interfaces;
 
 namespace RealworldonetAPI.Infrastructure.Repositories
 {
+    /// <summary>
+    /// Repository for managing comments in the database.
+    /// </summary>
     public class CommentsRepository : ICommentsRepository
     {
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CommentsRepository"/> class.
+        /// </summary>
+        /// <param name="context">The database context.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the context is null.</exception>
         public CommentsRepository(ApplicationDbContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
+        /// <summary>
+        /// Creates a new comment for an article asynchronously.
+        /// </summary>
+        /// <param name="slug">The slug of the article.</param>
+        /// <param name="comment">The comment to create.</param>
+        /// <returns>The created comment.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when there is an error creating the comment.</exception>
         public async Task<Comment> CreateCommentForArticleAsync(string slug, Comment comment)
         {
             try
@@ -36,7 +51,12 @@ namespace RealworldonetAPI.Infrastructure.Repositories
             }
         }
 
-
+        /// <summary>
+        /// Retrieves comments for an article by its slug asynchronously.
+        /// </summary>
+        /// <param name="slug">The slug of the article.</param>
+        /// <returns>A list of comments for the article.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when there is an error retrieving the comments.</exception>
         public async Task<IEnumerable<Comment>> GetCommentsForArticleAsync(string slug)
         {
             try
@@ -49,6 +69,13 @@ namespace RealworldonetAPI.Infrastructure.Repositories
             }
         }
 
+        /// <summary>
+        /// Deletes a comment from an article asynchronously.
+        /// </summary>
+        /// <param name="slug">The slug of the article.</param>
+        /// <param name="commentId">The ID of the comment to delete.</param>
+        /// <returns>A boolean indicating whether the deletion was successful.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when there is an error deleting the comment.</exception>
         public async Task<bool> DeleteCommentForArticleAsync(string slug, Guid commentId)
         {
             try
@@ -69,6 +96,12 @@ namespace RealworldonetAPI.Infrastructure.Repositories
             }
         }
 
+        /// <summary>
+        /// Retrieves a comment by its ID asynchronously.
+        /// </summary>
+        /// <param name="commentId">The ID of the comment.</param>
+        /// <returns>The comment with the specified ID.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when there is an error retrieving the comment.</exception>
         public async Task<Comment?> GetCommentByIdAsync(Guid commentId)
         {
             try

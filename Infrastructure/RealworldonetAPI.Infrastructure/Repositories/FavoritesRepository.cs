@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RealworldonetAPI.Domain.Entities;
 using RealworldonetAPI.Infrastructure.Context;
 using RealworldonetAPI.Infrastructure.Interfaces;
-using System.Security.Claims;
 
 namespace RealworldonetAPI.Infrastructure.Repositories
 {
@@ -13,48 +12,47 @@ namespace RealworldonetAPI.Infrastructure.Repositories
     public class FavoritesRepository : IFavoritesRepository
     {
         private readonly ApplicationDbContext _context;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ILogger<FavoritesRepository> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FavoritesRepository"/> class.
         /// </summary>
         /// <param name="context">The application database context.</param>
-        /// <param name="httpContextAccessor">The HTTP context accessor.</param>
-        public FavoritesRepository(ApplicationDbContext context, IHttpContextAccessor httpContextAccessor)
+        /// <param name="logger">The logger instance.</param>
+        public FavoritesRepository(ApplicationDbContext context, ILogger<FavoritesRepository> logger)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
-        }
-
-        private string GetCurrentUsername()
-        {
-            var username = _httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            if (string.IsNullOrEmpty(username))
-            {
-                throw new InvalidOperationException("User not found.");
-            }
-            return username;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         /// <summary>
         /// Favorites an article.
         /// </summary>
         /// <param name="slug">The slug of the article to favorite.</param>
+        /// <param name="userId">The ID of the user favoriting the article.</param>
         /// <returns>The favorited article.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the article or user is not found.</exception>
-        public async Task<ArticleFavorite> FavoriteArticleAsync(string slug)
+        /// <exception cref="InvalidOperationException">Thrown when the article is not found.</exception>
+        public async Task<ArticleFavorite> FavoriteArticleAsync(string slug, string userId)
         {
             var article = await _context.Articles.FirstOrDefaultAsync(a => a.Slug == slug);
+
             if (article == null)
             {
                 throw new InvalidOperationException("Article not found.");
             }
 
-            var username = GetCurrentUsername();
+            // If the user has already favorited the article, return the existing favorite
+            var existingFavorite = await _context.ArticleFavorites
+                .FirstOrDefaultAsync(f => f.ArticleId == article.Id && f.UserId == userId);
 
-            var favorite = new ArticleFavorite(username, article.Id);
+            if (existingFavorite != null)
+            {
+                return existingFavorite;
+            }
 
-            await _context.ArticleFavorites.AddAsync(favorite);
+            var favorite = new ArticleFavorite(userId, article.Id);
+
+            _context.ArticleFavorites.Add(favorite);
             await _context.SaveChangesAsync();
 
             return favorite;
@@ -64,30 +62,38 @@ namespace RealworldonetAPI.Infrastructure.Repositories
         /// Unfavorites an article.
         /// </summary>
         /// <param name="slug">The slug of the article to unfavorite.</param>
+        /// <param name="userId">The ID of the user unfavoriting the article.</param>
         /// <returns>True if the operation is successful, otherwise false.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the user is not found.</exception>
-        public async Task<bool> UnfavoriteArticleAsync(string slug)
+        public async Task<bool> UnfavoriteArticleAsync(string slug, string userId)
         {
-            var article = await _context.Articles.FirstOrDefaultAsync(a => a.Slug == slug);
-            if (article == null)
+            try
             {
-                return false;
+                var article = await _context.Articles.FirstOrDefaultAsync(a => a.Slug == slug);
+                if (article == null)
+                {
+                    _logger.LogWarning("Article with slug {Slug} not found.", slug);
+                    return false;
+                }
+
+                var favorite = await _context.ArticleFavorites
+                    .FirstOrDefaultAsync(f => f.ArticleId == article.Id && f.UserId == userId);
+
+                if (favorite == null)
+                {
+                    _logger.LogWarning("Favorite for article {ArticleId} and user {UserId} not found.", article.Id, userId);
+                    return false;
+                }
+
+                _context.ArticleFavorites.Remove(favorite);
+                await _context.SaveChangesAsync();
+
+                return true;
             }
-
-            var username = GetCurrentUsername();
-
-            var favorite = await _context.ArticleFavorites
-                .FirstOrDefaultAsync(f => f.ArticleId == article.Id && f.Username == username);
-
-            if (favorite == null)
+            catch (Exception ex)
             {
-                return false;
+                _logger.LogError(ex, "An error occurred while unfavoriting the article with slug {Slug} for user {UserId}.", slug, userId);
+                throw new InvalidOperationException("An error occurred while mapping the article for the unfavorite operation.", ex);
             }
-
-            _context.ArticleFavorites.Remove(favorite);
-            await _context.SaveChangesAsync();
-
-            return true;
         }
     }
 }

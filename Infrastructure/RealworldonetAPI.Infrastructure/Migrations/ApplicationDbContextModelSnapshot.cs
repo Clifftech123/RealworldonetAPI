@@ -22,51 +22,34 @@ namespace RealworldonetAPI.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
+                {
+                    b.Property<string>("FollowedUsersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FollowersId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("FollowedUsersId", "FollowersId");
+
+                    b.HasIndex("FollowersId");
+
+                    b.ToTable("UserFollowers", (string)null);
+                });
+
             modelBuilder.Entity("ArticleTag", b =>
                 {
-                    b.Property<Guid>("ArticleId")
+                    b.Property<Guid>("ArticlesId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("TagId")
+                    b.Property<int>("TagsId")
                         .HasColumnType("int");
 
-                    b.HasKey("ArticleId", "TagId");
+                    b.HasKey("ArticlesId", "TagsId");
 
-                    b.HasIndex("TagId");
+                    b.HasIndex("TagsId");
 
                     b.ToTable("ArticleTag");
-
-                    b.HasData(
-                        new
-                        {
-                            ArticleId = new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"),
-                            TagId = 1
-                        },
-                        new
-                        {
-                            ArticleId = new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"),
-                            TagId = 2
-                        },
-                        new
-                        {
-                            ArticleId = new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"),
-                            TagId = 3
-                        },
-                        new
-                        {
-                            ArticleId = new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"),
-                            TagId = 4
-                        },
-                        new
-                        {
-                            ArticleId = new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"),
-                            TagId = 5
-                        },
-                        new
-                        {
-                            ArticleId = new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"),
-                            TagId = 1
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -278,21 +261,6 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c4dc1832-1295-4339-b964-49dcbb6663b4",
-                            Email = "seeduser@example.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "dece851b-1d22-404d-8ea0-75e9d87df41f",
-                            TwoFactorEnabled = false,
-                            UserName = "seeduser@example.com"
-                        });
                 });
 
             modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Article", b =>
@@ -335,63 +303,6 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Articles");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"),
-                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
-                            Body = "Body 1",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(874), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Description 1",
-                            Slug = "first-global-article",
-                            Title = "First Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(876), new TimeSpan(0, 0, 0, 0, 0))
-                        },
-                        new
-                        {
-                            Id = new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"),
-                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
-                            Body = "Body 2",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(902), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Description 2",
-                            Slug = "second-global-article",
-                            Title = "Second Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(903), new TimeSpan(0, 0, 0, 0, 0))
-                        },
-                        new
-                        {
-                            Id = new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"),
-                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
-                            Body = "Body 3",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Description 3",
-                            Slug = "third-global-article",
-                            Title = "Third Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0))
-                        },
-                        new
-                        {
-                            Id = new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"),
-                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
-                            Body = "Body 4",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Description 4",
-                            Slug = "fourth-global-article",
-                            Title = "Fourth Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0))
-                        },
-                        new
-                        {
-                            Id = new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"),
-                            AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
-                            Body = "Body 5",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(972), new TimeSpan(0, 0, 0, 0, 0)),
-                            Description = "Description 5",
-                            Slug = "fifth-global-article",
-                            Title = "Fifth Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(973), new TimeSpan(0, 0, 0, 0, 0))
-                        });
                 });
 
             modelBuilder.Entity("RealworldonetAPI.Domain.Entities.ArticleFavorite", b =>
@@ -399,14 +310,10 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.Property<Guid>("ArticleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("UserId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ArticleId", "Username");
+                    b.HasKey("ArticleId", "UserId");
 
                     b.HasIndex("UserId");
 
@@ -460,61 +367,34 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Tags");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "programming"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "javascript"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "react"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "angular"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "vue"
-                        });
                 });
 
-            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.UserLink", b =>
+            modelBuilder.Entity("ApplicationUserApplicationUser", b =>
                 {
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(450)");
+                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("FollowedUsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<string>("FollowerUsername")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Username", "FollowerUsername");
-
-                    b.HasIndex("FollowerUsername");
-
-                    b.ToTable("UserLinks");
+                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", null)
+                        .WithMany()
+                        .HasForeignKey("FollowersId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ArticleTag", b =>
                 {
                     b.HasOne("RealworldonetAPI.Domain.Entities.Article", null)
                         .WithMany()
-                        .HasForeignKey("ArticleId")
+                        .HasForeignKey("ArticlesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RealworldonetAPI.Domain.Entities.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagId")
+                        .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -619,25 +499,6 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.Navigation("Author");
                 });
 
-            modelBuilder.Entity("RealworldonetAPI.Domain.Entities.UserLink", b =>
-                {
-                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "FollowerUser")
-                        .WithMany("FollowedUsers")
-                        .HasForeignKey("FollowerUsername")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "User")
-                        .WithMany("Followers")
-                        .HasForeignKey("Username")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FollowerUser");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RealworldonetAPI.Domain.Entities.ApplicationUser", b =>
                 {
                     b.Navigation("ArticleComments");
@@ -645,10 +506,6 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.Navigation("ArticleFavorites");
 
                     b.Navigation("Articles");
-
-                    b.Navigation("FollowedUsers");
-
-                    b.Navigation("Followers");
                 });
 
             modelBuilder.Entity("RealworldonetAPI.Domain.Entities.Article", b =>

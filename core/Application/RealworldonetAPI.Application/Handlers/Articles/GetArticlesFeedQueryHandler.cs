@@ -10,6 +10,9 @@ using RealworldonetAPI.Infrastructure.Interfaces;
 
 namespace RealworldonetAPI.Application.Handlers.Article
 {
+    /// <summary>
+    /// Handles the retrieval of articles feed.
+    /// </summary>
     public class GetArticlesFeedQueryHandler : IRequestHandler<GetArticlesFeedQuery, ArticlesResponseWrapper>
     {
         private readonly IArticleRepository _articleRepository;
@@ -17,21 +20,35 @@ namespace RealworldonetAPI.Application.Handlers.Article
         private readonly ApplicationDbContext _context;
         private readonly ICurrentUserService _currentUserService;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GetArticlesFeedQueryHandler"/> class.
+        /// </summary>
+        /// <param name="articleRepository">The repository for managing articles.</param>
+        /// <param name="mapper">The mapper for converting between entities and DTOs.</param>
+        /// <param name="context">The database context.</param>
+        /// <param name="currentUserService">The service for retrieving the current user.</param>
         public GetArticlesFeedQueryHandler(IArticleRepository articleRepository, IMapper mapper, ApplicationDbContext context,
             ICurrentUserService currentUserService)
         {
-
             _articleRepository = articleRepository;
             _mapper = mapper;
             _context = context;
             _currentUserService = currentUserService;
         }
 
+        /// <summary>
+        /// Handles the retrieval of articles feed.
+        /// </summary>
+        /// <param name="request">The query containing the details for retrieving the articles feed.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>A wrapper containing the list of articles and the total count.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when a database error occurs, an error occurs while mapping, or an unexpected error occurs.
+        /// </exception>
         public async Task<ArticlesResponseWrapper> Handle(GetArticlesFeedQuery request, CancellationToken cancellationToken)
         {
             try
             {
-
                 var articles = await _context.Articles
                     .Where(a => a.AuthorId == _currentUserService.GetUserId())
                     .Include(a => a.Author)
@@ -62,7 +79,4 @@ namespace RealworldonetAPI.Application.Handlers.Article
             }
         }
     }
-
-
-
 }

@@ -1,88 +1,120 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RealworldonetAPI.Application.DTO.user;
-using RealworldonetAPI.Domain.Entities;
 using RealworldonetAPI.Infrastructure.Context;
 using RealworldonetAPI.Infrastructure.Interfaces;
 
 public class ProfileRepository : IProfileRepository
 {
     private readonly ApplicationDbContext _context;
+    private readonly IMapper _mapper;
+    private readonly ILogger<ProfileRepository> _logger;
 
-    public ProfileRepository(ApplicationDbContext context)
+    public ProfileRepository(ApplicationDbContext context, IMapper mapper, ILogger<ProfileRepository> logger)
     {
         _context = context;
+        _mapper = mapper;
+        _logger = logger;
     }
 
-    // Get a user's profile
-    public async Task<UserProfile> GetProfileAsync(string username)
+    public async Task<UserProfiledto> GetProfileAsync(string username)
     {
         var user = await _context.Users
-            .Where(u => u.UserName == username)
-            .Select(u => new UserProfile
-            {
-                Username = u.UserName ?? string.Empty,
-                Email = u.Email ?? string.Empty,
-                Bio = u.Bio ?? string.Empty,
-                Image = u.Image ?? string.Empty,
-                Following = _context.UserLinks.Any(ul => ul.Username == username && ul.FollowerUsername == u.UserName)
-            })
-            .FirstOrDefaultAsync();
+            .Include(u => u.Followers)
+            .Include(u => u.FollowedUsers)
+            .Include(u => u.Articles)
+            .FirstOrDefaultAsync(u => u.UserName == username);
 
-        return user ?? new UserProfile();
+        if (user == null)
+        {
+            _logger.LogWarning("Profile not found for username: {Username}", username);
+            return null;
+        }
+
+        var userProfile = _mapper.Map<UserProfiledto>(user);
+        userProfile.Following = user.Followers.Any(f => f.UserName == username);
+
+        _logger.LogInformation("Profile retrieved for username: {Username}", username);
+        return userProfile;
     }
 
-
-    // Follow a user
     public async Task<bool> FollowUserAsync(string followerUsername, string followingUsername)
     {
-        if (followerUsername == followingUsername)
+        try
         {
+            if (followerUsername == followingUsername)
+            {
+                _logger.LogWarning("Attempt to follow self: {FollowerUsername}", followerUsername);
+                return false;
+            }
+
+            var follower = await _context.Users
+                .Include(u => u.FollowedUsers)
+                .FirstOrDefaultAsync(u => u.UserName == followerUsername);
+            var following = await _context.Users.FirstOrDefaultAsync(u => u.UserName == followingUsername);
+
+            if (follower == null || following == null)
+            {
+                _logger.LogWarning("Follow attempt failed. Follower: {FollowerUsername}, Following: {FollowingUsername}. One or both users not found.", followerUsername, followingUsername);
+                return false;
+            }
+
+            if (follower.FollowedUsers.Any(u => u.Id == following.Id))
+            {
+                _logger.LogInformation("{FollowerUsername} is already following {FollowingUsername}", followerUsername, followingUsername);
+                return false;
+            }
+
+            follower.FollowedUsers.Add(following);
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("{FollowerUsername} successfully followed {FollowingUsername}", followerUsername, followingUsername);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in FollowUserAsync. Follower: {FollowerUsername}, Following: {FollowingUsername}", followerUsername, followingUsername);
             return false;
         }
-
-        // Check if the users exist
-        var follower = await _context.Users.FirstOrDefaultAsync(u => u.UserName == followerUsername);
-        var following = await _context.Users.FirstOrDefaultAsync(u => u.UserName == followingUsername);
-
-        if (follower == null || following == null)
-        {
-            return false;
-        }
-
-        // Check if the user link already exists
-
-        var userLinkExists = await _context.UserLinks.AnyAsync(ul => ul.Username == followingUsername && ul.FollowerUsername == followerUsername);
-
-        if (userLinkExists)
-        {
-            return false;
-        }
-
-        _context.UserLinks.Add(new UserLink
-        {
-            Username = followingUsername,
-            FollowerUsername = followerUsername
-        });
-
-        await _context.SaveChangesAsync();
-        return true;
     }
 
-
-    // Unfollow a user
     public async Task<bool> UnfollowUserAsync(string followerUsername, string followingUsername)
     {
-        var userLink = await _context.UserLinks.FirstOrDefaultAsync(ul => ul.Username == followingUsername && ul.FollowerUsername == followerUsername);
-
-        if (userLink == null)
+        try
         {
+            var follower = await _context.Users
+                .Include(u => u.FollowedUsers)
+                .FirstOrDefaultAsync(u => u.UserName == followerUsername);
+            var following = await _context.Users
+                .Include(u => u.Followers)
+                .FirstOrDefaultAsync(u => u.UserName == followingUsername);
+
+            if (follower == null || following == null)
+            {
+                _logger.LogWarning("Unfollow attempt failed. Follower: {FollowerUsername}, Following: {FollowingUsername}. One or both users not found.", followerUsername, followingUsername);
+                return false;
+            }
+
+            var followRelation = follower.FollowedUsers.FirstOrDefault(u => u.Id == following.Id);
+            if (followRelation == null)
+            {
+                _logger.LogInformation("{FollowerUsername} is not following {FollowingUsername}", followerUsername, followingUsername);
+                return false;
+            }
+
+            follower.FollowedUsers.Remove(followRelation);
+            following.Followers.Remove(follower);
+
+            await _context.SaveChangesAsync();
+
+            _logger.LogInformation("{FollowerUsername} successfully unfollowed {FollowingUsername}", followerUsername, followingUsername);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in UnfollowUserAsync. Follower: {FollowerUsername}, Following: {FollowingUsername}", followerUsername, followingUsername);
             return false;
         }
-
-        _context.UserLinks.Remove(userLink);
-        await _context.SaveChangesAsync();
-        return true;
     }
-
-
 }
