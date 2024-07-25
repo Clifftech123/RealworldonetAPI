@@ -276,7 +276,7 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ArticleId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false)
@@ -291,8 +291,8 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_AspNetUsers_Username",
-                        column: x => x.Username,
+                        name: "FK_Comments_AspNetUsers_AuthorId",
+                        column: x => x.AuthorId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -301,7 +301,7 @@ namespace RealworldonetAPI.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "Bio", "ConcurrencyStamp", "Email", "EmailConfirmed", "Image", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "Token", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", 0, null, "66adc0ae-6faa-43d1-bb4e-e00c843beb34", "seeduser@example.com", false, null, false, null, null, null, null, null, false, "b6a1f701-d750-42a6-8a53-025bbba45054", null, false, "seeduser@example.com" });
+                values: new object[] { "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", 0, null, "c4dc1832-1295-4339-b964-49dcbb6663b4", "seeduser@example.com", false, null, false, null, null, null, null, null, false, "dece851b-1d22-404d-8ea0-75e9d87df41f", null, false, "seeduser@example.com" });
 
             migrationBuilder.InsertData(
                 table: "Tags",
@@ -320,11 +320,11 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 columns: new[] { "Id", "AuthorId", "Body", "CreatedAt", "Description", "Slug", "Title", "UpdatedAt" },
                 values: new object[,]
                 {
-                    { new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 1", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6576), new TimeSpan(0, 0, 0, 0, 0)), "Description 1", "first-global-article", "First Global Article", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6577), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("26214f52-95fc-44c4-9717-aa9d4b1f7a7b"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 4", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6656), new TimeSpan(0, 0, 0, 0, 0)), "Description 4", "fourth-global-article", "Fourth Global Article", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6657), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("409f179f-8943-414a-9de7-a04ce937e503"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 5", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6688), new TimeSpan(0, 0, 0, 0, 0)), "Description 5", "fifth-global-article", "Fifth Global Article", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6689), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("a1c65cbe-b754-4b77-b977-5ebf2bdaf76d"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 3", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6632), new TimeSpan(0, 0, 0, 0, 0)), "Description 3", "third-global-article", "Third Global Article", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6633), new TimeSpan(0, 0, 0, 0, 0)) },
-                    { new Guid("f439da89-c2bb-4ce4-824f-4d96e553c630"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 2", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6609), new TimeSpan(0, 0, 0, 0, 0)), "Description 2", "second-global-article", "Second Global Article", new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6609), new TimeSpan(0, 0, 0, 0, 0)) }
+                    { new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 1", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(874), new TimeSpan(0, 0, 0, 0, 0)), "Description 1", "first-global-article", "First Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(876), new TimeSpan(0, 0, 0, 0, 0)) },
+                    { new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 3", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0)), "Description 3", "third-global-article", "Third Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0)) },
+                    { new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 5", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(972), new TimeSpan(0, 0, 0, 0, 0)), "Description 5", "fifth-global-article", "Fifth Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(973), new TimeSpan(0, 0, 0, 0, 0)) },
+                    { new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 4", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0)), "Description 4", "fourth-global-article", "Fourth Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0)) },
+                    { new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"), "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1", "Body 2", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(902), new TimeSpan(0, 0, 0, 0, 0)), "Description 2", "second-global-article", "Second Global Article", new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(903), new TimeSpan(0, 0, 0, 0, 0)) }
                 });
 
             migrationBuilder.InsertData(
@@ -332,12 +332,12 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 columns: new[] { "ArticleId", "TagId" },
                 values: new object[,]
                 {
-                    { new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"), 1 },
-                    { new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"), 2 },
-                    { new Guid("26214f52-95fc-44c4-9717-aa9d4b1f7a7b"), 5 },
-                    { new Guid("409f179f-8943-414a-9de7-a04ce937e503"), 1 },
-                    { new Guid("a1c65cbe-b754-4b77-b977-5ebf2bdaf76d"), 4 },
-                    { new Guid("f439da89-c2bb-4ce4-824f-4d96e553c630"), 3 }
+                    { new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"), 1 },
+                    { new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"), 2 },
+                    { new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"), 4 },
+                    { new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"), 1 },
+                    { new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"), 5 },
+                    { new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"), 3 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -413,9 +413,9 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                 column: "ArticleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_Username",
+                name: "IX_Comments_AuthorId",
                 table: "Comments",
-                column: "Username");
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserLinks_FollowerUsername",

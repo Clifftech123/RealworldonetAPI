@@ -39,9 +39,6 @@ namespace RealworldonetAPI.Application.Handlers.Article
                     .Skip(request.Offset)
                     .Take(request.Limit)
                     .ToListAsync();
-
-
-                // var articles = await _articleRepository.GetFeedAsync(request.Offset, request.Limit);
                 var articleResponseDtos = _mapper.Map<List<ArticleResponseDto>>(articles);
                 var totalCount = await _articleRepository.GetTotalCountAsync();
 

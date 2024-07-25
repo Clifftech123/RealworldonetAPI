@@ -12,7 +12,7 @@ using RealworldonetAPI.Infrastructure.Context;
 namespace RealworldonetAPI.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240724220335_InitialCreate")]
+    [Migration("20240725010011_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,32 +42,32 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            ArticleId = new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"),
+                            ArticleId = new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"),
                             TagId = 1
                         },
                         new
                         {
-                            ArticleId = new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"),
+                            ArticleId = new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"),
                             TagId = 2
                         },
                         new
                         {
-                            ArticleId = new Guid("f439da89-c2bb-4ce4-824f-4d96e553c630"),
+                            ArticleId = new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"),
                             TagId = 3
                         },
                         new
                         {
-                            ArticleId = new Guid("a1c65cbe-b754-4b77-b977-5ebf2bdaf76d"),
+                            ArticleId = new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"),
                             TagId = 4
                         },
                         new
                         {
-                            ArticleId = new Guid("26214f52-95fc-44c4-9717-aa9d4b1f7a7b"),
+                            ArticleId = new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"),
                             TagId = 5
                         },
                         new
                         {
-                            ArticleId = new Guid("409f179f-8943-414a-9de7-a04ce937e503"),
+                            ArticleId = new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"),
                             TagId = 1
                         });
                 });
@@ -287,12 +287,12 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                         {
                             Id = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "66adc0ae-6faa-43d1-bb4e-e00c843beb34",
+                            ConcurrencyStamp = "c4dc1832-1295-4339-b964-49dcbb6663b4",
                             Email = "seeduser@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b6a1f701-d750-42a6-8a53-025bbba45054",
+                            SecurityStamp = "dece851b-1d22-404d-8ea0-75e9d87df41f",
                             TwoFactorEnabled = false,
                             UserName = "seeduser@example.com"
                         });
@@ -342,58 +342,58 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("191c885a-5e6e-43f7-86a4-a55e4b351c11"),
+                            Id = new Guid("05b41d84-0b4c-44e0-a346-2dfdb131eb67"),
                             AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
                             Body = "Body 1",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6576), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(874), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Description 1",
                             Slug = "first-global-article",
                             Title = "First Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6577), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(876), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
-                            Id = new Guid("f439da89-c2bb-4ce4-824f-4d96e553c630"),
+                            Id = new Guid("c4b33e32-3adb-463a-a695-41592ae3713f"),
                             AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
                             Body = "Body 2",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6609), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(902), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Description 2",
                             Slug = "second-global-article",
                             Title = "Second Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6609), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(903), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
-                            Id = new Guid("a1c65cbe-b754-4b77-b977-5ebf2bdaf76d"),
+                            Id = new Guid("2d1f040c-ace8-45dd-aca0-6a8c959d838b"),
                             AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
                             Body = "Body 3",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6632), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Description 3",
                             Slug = "third-global-article",
                             Title = "Third Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6633), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(926), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
-                            Id = new Guid("26214f52-95fc-44c4-9717-aa9d4b1f7a7b"),
+                            Id = new Guid("a0dac014-3ab2-4cd7-9bf7-0a0bc5846e5a"),
                             AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
                             Body = "Body 4",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6656), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Description 4",
                             Slug = "fourth-global-article",
                             Title = "Fourth Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6657), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(949), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
-                            Id = new Guid("409f179f-8943-414a-9de7-a04ce937e503"),
+                            Id = new Guid("99f74c46-3eeb-4275-a719-31b5eef5108b"),
                             AuthorId = "f3a8ec7c-ab34-4c89-a71b-fcbf9283f8e1",
                             Body = "Body 5",
-                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6688), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(972), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Description 5",
                             Slug = "fifth-global-article",
                             Title = "Fifth Global Article",
-                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 24, 22, 3, 35, 40, DateTimeKind.Unspecified).AddTicks(6689), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2024, 7, 25, 1, 0, 11, 91, DateTimeKind.Unspecified).AddTicks(973), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 
@@ -425,6 +425,10 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.Property<Guid>("ArticleId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Body")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -435,15 +439,11 @@ namespace RealworldonetAPI.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("UpdatedAt")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ArticleId");
 
-                    b.HasIndex("Username");
+                    b.HasIndex("AuthorId");
 
                     b.ToTable("Comments");
                 });
@@ -613,7 +613,7 @@ namespace RealworldonetAPI.Infrastructure.Migrations
 
                     b.HasOne("RealworldonetAPI.Domain.Entities.ApplicationUser", "Author")
                         .WithMany("ArticleComments")
-                        .HasForeignKey("Username")
+                        .HasForeignKey("AuthorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

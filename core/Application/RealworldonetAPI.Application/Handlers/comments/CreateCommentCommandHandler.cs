@@ -1,46 +1,50 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
-using RealworldonetAPI.Application.Commands.Comments;
+using Microsoft.EntityFrameworkCore;
 using RealworldonetAPI.Application.DTO.comments;
 using RealworldonetAPI.Application.Interface;
-using RealworldonetAPI.Domain.Entities;
+using RealworldonetAPI.Infrastructure.Context;
 using RealworldonetAPI.Infrastructure.Interfaces;
 
 namespace RealworldonetAPI.Application.Handlers.comments
 {
-    public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, CommentResponseDto>
+    public class CreateCommentCommandHandler : IRequestHandler<CreateCommentCommand, CommentDetailDto>
     {
         private readonly ICommentsRepository _commentRepository;
         private readonly IMapper _mapper;
         private readonly ICurrentUserService _currentUserService;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public CreateCommentCommandHandler(ICommentsRepository commentRepository, IMapper mapper, ICurrentUserService currentUserService, UserManager<ApplicationUser> userManager)
+        public CreateCommentCommandHandler(ICommentsRepository commentRepository, IMapper mapper, ICurrentUserService currentUserService, ApplicationDbContext context)
         {
             _commentRepository = commentRepository ?? throw new ArgumentNullException(nameof(commentRepository));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _currentUserService = currentUserService ?? throw new ArgumentNullException(nameof(currentUserService));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
-        public async Task<CommentResponseDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
+        public async Task<CommentDetailDto> Handle(CreateCommentCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var userId = _currentUserService.GetUserId();
-                var user = await _userManager.FindByIdAsync(userId);
-                if (user == null)
+
+                var article = await _context.Articles
+                    .Where(a => a.AuthorId == userId)
+                    .Where(a => a.Slug == request.Slug)
+                    .Include(a => a.Author)
+                    .FirstOrDefaultAsync();
+
+                if (article == null)
                 {
-                    throw new InvalidOperationException("User not found.");
+                    throw new InvalidOperationException("Article not found or user not authorized.");
                 }
 
-                var comment = _mapper.Map<Domain.Entities.Comment>(request.CreateComment);
-                // Set the Username using the ApplicationUser's username
-                comment.Username = user.UserName;
+                var comment = _mapper.Map<Domain.Entities.Comment>(request.Comment);
+                comment.AuthorId = _currentUserService.GetUserId();
 
                 var createdComment = await _commentRepository.CreateCommentForArticleAsync(request.Slug, comment);
-                var commentResponseDto = _mapper.Map<CommentResponseDto>(createdComment);
+                var commentResponseDto = _mapper.Map<CommentDetailDto>(createdComment);
                 return commentResponseDto;
             }
             catch (Exception ex)

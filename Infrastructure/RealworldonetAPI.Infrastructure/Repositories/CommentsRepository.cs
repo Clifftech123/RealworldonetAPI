@@ -41,7 +41,7 @@ namespace RealworldonetAPI.Infrastructure.Repositories
         {
             try
             {
-                return await _context.Comments.Where(c => c.Article.Slug == slug).ToListAsync();
+                return await _context.Comments.Where(c => c.Article.Slug == slug).Where(c => c.ArticleId == c.Article.Id).ToListAsync();
             }
             catch (Exception ex)
             {

@@ -6,7 +6,7 @@ using RealworldonetAPI.Infrastructure.Interfaces;
 
 namespace RealworldonetAPI.Application.Handlers.comments
 {
-    public class GetCommentCommandHandler : IRequestHandler<GetCommentCommand, CommentResponseDto>
+    public class GetCommentCommandHandler : IRequestHandler<GetCommentCommand, List<CommentDetailDto>>
     {
         private readonly ICommentsRepository _commentRepository;
         private readonly IMapper _mapper;
@@ -17,17 +17,16 @@ namespace RealworldonetAPI.Application.Handlers.comments
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<CommentResponseDto> Handle(GetCommentCommand request, CancellationToken cancellationToken)
+        public async Task<List<CommentDetailDto>> Handle(GetCommentCommand request, CancellationToken cancellationToken)
         {
             try
             {
                 var comment = await _commentRepository.GetCommentsForArticleAsync(request.Slug);
-                var commentResponseDto = _mapper.Map<CommentResponseDto>(comment);
+                var commentResponseDto = _mapper.Map<List<CommentDetailDto>>(comment);
                 return commentResponseDto;
             }
             catch (Exception ex)
             {
-
                 throw new InvalidOperationException($"An error occurred while retrieving the comment: {ex.Message}", ex);
             }
         }

@@ -58,7 +58,7 @@ namespace RealworldonetAPI.Infrastructure.Context
                     .HasForeignKey(x => x.ArticleId);
                  entity.HasOne(x => x.Author)
                 .WithMany(x => x.ArticleComments)
-                .HasForeignKey(x => x.Username);
+                  .HasForeignKey(c => c.AuthorId);
              });
 
             modelBuilder.Entity<UserLink>(entity =>
