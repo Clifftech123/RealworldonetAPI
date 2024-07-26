@@ -1,16 +1,26 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealworldonetAPI.Application.DTO.user;
 using RealworldonetAPI.Infrastructure.Context;
 using RealworldonetAPI.Infrastructure.Interfaces;
 
+/// <summary>  
+/// Repository for managing user profiles.  
+/// </summary>  
 public class ProfileRepository : IProfileRepository
 {
     private readonly ApplicationDbContext _context;
     private readonly IMapper _mapper;
     private readonly ILogger<ProfileRepository> _logger;
 
+    /// <summary>  
+    /// Initializes a new instance of the <see cref="ProfileRepository"/> class.  
+    /// </summary>  
+    /// <param name="context">The application database context.</param>  
+    /// <param name="mapper">The AutoMapper instance.</param>  
+    /// <param name="logger">The logger instance.</param>  
     public ProfileRepository(ApplicationDbContext context, IMapper mapper, ILogger<ProfileRepository> logger)
     {
         _context = context;
@@ -18,6 +28,11 @@ public class ProfileRepository : IProfileRepository
         _logger = logger;
     }
 
+    /// <summary>  
+    /// Gets the profile of a user by username.  
+    /// </summary>  
+    /// <param name="username">The username of the user.</param>  
+    /// <returns>The user profile DTO.</returns>  
     public async Task<UserProfiledto> GetProfileAsync(string username)
     {
         var user = await _context.Users
@@ -39,6 +54,12 @@ public class ProfileRepository : IProfileRepository
         return userProfile;
     }
 
+    /// <summary>  
+    /// Follows a user.  
+    /// </summary>  
+    /// <param name="followerUsername">The username of the follower.</param>  
+    /// <param name="followingUsername">The username of the user to be followed.</param>  
+    /// <returns>A boolean indicating whether the operation was successful.</returns>  
     public async Task<bool> FollowUserAsync(string followerUsername, string followingUsername)
     {
         try
@@ -79,6 +100,12 @@ public class ProfileRepository : IProfileRepository
         }
     }
 
+    /// <summary>  
+    /// Unfollows a user.  
+    /// </summary>  
+    /// <param name="followerUsername">The username of the follower.</param>  
+    /// <param name="followingUsername">The username of the user to be unfollowed.</param>  
+    /// <returns>A boolean indicating whether the operation was successful.</returns>  
     public async Task<bool> UnfollowUserAsync(string followerUsername, string followingUsername)
     {
         try

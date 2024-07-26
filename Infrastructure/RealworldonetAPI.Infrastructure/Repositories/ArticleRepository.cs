@@ -33,7 +33,7 @@ namespace RealworldonetAPI.Infrastructure.Repositories
         {
             try
             {
-
+                article.Favorited = false;
                 await _context.Articles.AddAsync(article);
                 await _context.SaveChangesAsync();
                 return article;
@@ -56,6 +56,18 @@ namespace RealworldonetAPI.Infrastructure.Repositories
             {
                 return await _context.Articles
                     .Include(a => a.Author)
+                    .Select(a => new Article
+                    {
+                        Slug = a.Slug,
+                        Title = a.Title,
+                        Description = a.Description,
+                        Body = a.Body,
+                        Tags = a.Tags,
+                        CreatedAt = a.CreatedAt,
+                        UpdatedAt = a.UpdatedAt,
+                        Favorited = a.Favorited,
+                        FavoritesCount = a.ArticleFavorites.Count,
+                    })
                     .FirstOrDefaultAsync(a => a.Slug == slug);
             }
             catch (Exception ex)
@@ -90,6 +102,19 @@ namespace RealworldonetAPI.Infrastructure.Repositories
                     .OrderByDescending(a => a.CreatedAt)
                     .Skip(skipAmount)
                     .Take(limit)
+                    .Select(a => new Article
+                    {
+                        Slug = a.Slug,
+                        Title = a.Title,
+                        Description = a.Description,
+                        Body = a.Body,
+                        Tags = a.Tags,
+                        CreatedAt = a.CreatedAt,
+                        UpdatedAt = a.UpdatedAt,
+                        Favorited = a.Favorited,
+                        FavoritesCount = a.ArticleFavorites.Count,
+
+                    })
                     .ToListAsync();
             }
             catch (ArgumentOutOfRangeException ex)
@@ -136,11 +161,25 @@ namespace RealworldonetAPI.Infrastructure.Repositories
 
             int skipAmount = (offset - 1) * limit;
 
-            return await query
-                .OrderByDescending(a => a.CreatedAt)
-                .Skip(skipAmount)
-                .Take(limit)
-                .ToListAsync();
+            var result = await query
+               .OrderByDescending(a => a.CreatedAt)
+               .Skip(skipAmount)
+               .Take(limit)
+               .Select(a => new Article
+               {
+                   Slug = a.Slug,
+                   Title = a.Title,
+                   Description = a.Description,
+                   Body = a.Body,
+                   Tags = a.Tags,
+                   CreatedAt = a.CreatedAt,
+                   UpdatedAt = a.UpdatedAt,
+                   Favorited = a.Favorited,
+                   FavoritesCount = a.ArticleFavorites.Count,
+
+               })
+               .ToListAsync();
+            return result;
         }
 
         /// <summary>  

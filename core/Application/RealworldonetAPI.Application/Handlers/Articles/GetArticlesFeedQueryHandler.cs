@@ -55,6 +55,18 @@ namespace RealworldonetAPI.Application.Handlers.Article
                     .OrderByDescending(a => a.CreatedAt)
                     .Skip(request.Offset)
                     .Take(request.Limit)
+                    .Select(a => new Domain.Entities.Article
+                    {
+                        Slug = a.Slug,
+                        Title = a.Title,
+                        Description = a.Description,
+                        Body = a.Body,
+                        Tags = a.Tags,
+                        CreatedAt = a.CreatedAt,
+                        UpdatedAt = a.UpdatedAt,
+                        Favorited = a.Favorited,
+                        FavoritesCount = a.ArticleFavorites.Count,
+                    })
                     .ToListAsync();
                 var articleResponseDtos = _mapper.Map<List<ArticleResponseDto>>(articles);
                 var totalCount = await _articleRepository.GetTotalCountAsync();

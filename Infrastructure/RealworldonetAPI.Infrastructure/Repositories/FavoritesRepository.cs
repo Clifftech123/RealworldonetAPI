@@ -41,6 +41,7 @@ namespace RealworldonetAPI.Infrastructure.Repositories
                 throw new InvalidOperationException("Article not found.");
             }
 
+
             // If the user has already favorited the article, return the existing favorite
             var existingFavorite = await _context.ArticleFavorites
                 .FirstOrDefaultAsync(f => f.ArticleId == article.Id && f.UserId == userId);
@@ -53,6 +54,7 @@ namespace RealworldonetAPI.Infrastructure.Repositories
             var favorite = new ArticleFavorite(userId, article.Id);
 
             _context.ArticleFavorites.Add(favorite);
+            article.Favorited = true;
             await _context.SaveChangesAsync();
 
             return favorite;
@@ -69,6 +71,7 @@ namespace RealworldonetAPI.Infrastructure.Repositories
             try
             {
                 var article = await _context.Articles.FirstOrDefaultAsync(a => a.Slug == slug);
+                article.Favorited = false;
                 if (article == null)
                 {
                     _logger.LogWarning("Article with slug {Slug} not found.", slug);

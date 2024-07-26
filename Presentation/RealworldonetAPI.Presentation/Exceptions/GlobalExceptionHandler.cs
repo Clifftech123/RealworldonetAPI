@@ -2,7 +2,7 @@
 using System.Net;
 using ErrorResponse = RealworldonetAPI.Domain.models.ErrorResponse;
 
-namespace RealworldonetAPI.Presentation.Exceptions.Handlers
+namespace RealworldonetAPI.Presentation.Exceptions
 {
     public class GlobalExceptionHandler : IExceptionHandler
     {

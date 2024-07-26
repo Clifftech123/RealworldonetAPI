@@ -16,24 +16,7 @@ namespace RealworldonetAPI.Infrastructure.Configurations
                     Email = "seeduser@example.com",
 
                 });
-            /*  builder.HasData(
-                  new ApplicationUser
-                  {
-                      Id = "user1",
-                      UserName = "johndoe",
-                      Email = "johndoe@example.com",
-                      Bio = "I'm a software developer",
-                      Image = "https://api.realworld.io/images/demo-avatar.png"
-                  },
-                  new ApplicationUser
-                  {
-                      Id = "user2",
-                      UserName = "janedoe",
-                      Email = "janedoe@example.com",
-                      Bio = "I'm a web designer",
-                      Image = "https://api.realworld.io/images/demo-avatar.png"
-                  }
-              ); */
+
         }
     }
 

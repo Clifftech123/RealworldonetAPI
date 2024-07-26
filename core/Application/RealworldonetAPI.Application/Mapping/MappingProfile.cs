@@ -38,13 +38,13 @@ namespace RealworldonetAPI.Application.Mapping
 
             CreateMap<Article, ArticleResponseDto>()
                 .ForMember(dest => dest.TagList, opt => opt.MapFrom(src => src.Tags.Select(t => t.Name).ToList()))
-                .ForMember(dest => dest.FavoritesCount, opt => opt.MapFrom(src => src.ArticleFavorites.Count))
+                //.ForMember(dest => dest.FavoritesCount, opt => opt.MapFrom(src => src.ArticleFavorites.Count))
                 .ForMember(dest => dest.Author, opt => opt.MapFrom(src => src.Author));
 
             CreateMap<ArticleFavorite, ArticleResponseDto>()
                 .IncludeMembers(src => src.Article)
-                .ForMember(dest => dest.Favorited, opt => opt.MapFrom((src, dest, _, context) => true))
-                .ForMember(dest => dest.FavoritesCount, opt => opt.MapFrom(src => src.Article.ArticleFavorites.Count));
+                .ForMember(dest => dest.Favorited, opt => opt.MapFrom((src, dest, _, context) => true));
+            //.ForMember(dest => dest.FavoritesCount, opt => opt.MapFrom(src => src.Article.ArticleFavorites.Count));
 
             CreateMap<Comment, CommentDetailDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))

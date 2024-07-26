@@ -10,6 +10,9 @@ using RealworldonetAPI.Infrastructure.Interfaces;
 
 namespace RealworldonetAPI.Application.Handlers.Favorites
 {
+    /// <summary>
+    /// Handles the command to unfavorite an article.
+    /// </summary>
     public class UnfavoriteArticleCommandHandler : IRequestHandler<UnfavoriteArticleCommand, ArticleResponseDto>
     {
         private readonly IFavoritesRepository _favoriteRepository;
@@ -17,6 +20,13 @@ namespace RealworldonetAPI.Application.Handlers.Favorites
         private readonly ICurrentUserService _currentUserService;
         private readonly ApplicationDbContext _context;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UnfavoriteArticleCommandHandler"/> class.
+        /// </summary>
+        /// <param name="favoriteRepository">The repository for managing article favorites.</param>
+        /// <param name="mapper">The AutoMapper instance.</param>
+        /// <param name="currentUserService">The service to get the current user information.</param>
+        /// <param name="context">The application database context.</param>
         public UnfavoriteArticleCommandHandler(IFavoritesRepository favoriteRepository, IMapper mapper, ICurrentUserService currentUserService, ApplicationDbContext context)
         {
             _favoriteRepository = favoriteRepository;
@@ -25,6 +35,15 @@ namespace RealworldonetAPI.Application.Handlers.Favorites
             _context = context;
         }
 
+        /// <summary>
+        /// Handles the command to unfavorite an article.
+        /// </summary>
+        /// <param name="request">The command request containing the article slug.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The response DTO containing the unfavorited article information.</returns>
+        /// <exception cref="InvalidOperationException">
+        /// Thrown when the article is not found, a database error occurs, or a mapping error occurs.
+        /// </exception>
         public async Task<ArticleResponseDto> Handle(UnfavoriteArticleCommand request, CancellationToken cancellationToken)
         {
             try

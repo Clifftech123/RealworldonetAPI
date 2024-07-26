@@ -10,7 +10,7 @@ using RealworldonetAPI.Domain.Entities;
 using RealworldonetAPI.Infrastructure.Context;
 using RealworldonetAPI.Infrastructure.Interfaces;
 using RealworldonetAPI.Infrastructure.Repositories;
-using RealworldonetAPI.Presentation.Exceptions.Handlers;
+using RealworldonetAPI.Presentation.Exceptions;
 using RealworldonetAPI.Presentation.Extensions;
 using System.Reflection;
 

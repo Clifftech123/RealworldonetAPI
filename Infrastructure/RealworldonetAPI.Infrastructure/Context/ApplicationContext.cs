@@ -35,7 +35,7 @@ namespace RealworldonetAPI.Infrastructure.Context
             {
                 entity.HasKey(e => e.Id);
                 entity.HasIndex(e => e.Slug).IsUnique();
-                entity.Ignore(e => e.Favorited);
+                //entity.Ignore(e => e.Favorited);
                 entity.Ignore(e => e.FavoritesCount);
                 entity.HasOne(a => a.Author)
                     .WithMany(a => a.Articles)
