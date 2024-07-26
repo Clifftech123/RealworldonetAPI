@@ -8,6 +8,11 @@ namespace RealworldonetAPI.Presentation.Extensions
 {
     public static partial class ConfigureApplicationServices
     {
+        /// <summary>
+        /// Configures CORS policy for the application.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="configuration">The configuration instance.</param>
         public static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddCors(options => options.AddPolicy("CorsPolicy", policy => policy
@@ -16,12 +21,12 @@ namespace RealworldonetAPI.Presentation.Extensions
                 .AllowAnyHeader()));
         }
 
-
-        // Configure identity options for better security and user management
-
+        /// <summary>
+        /// Configures identity options for better security and user management.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
         public static void ConfigureIdentity(this IServiceCollection services)
         {
-            // Configuring identity options for better security and user management
             var builder = services.AddIdentityCore<IdentityUser>(o =>
             {
                 o.Password.RequireNonAlphanumeric = false;
@@ -29,19 +34,20 @@ namespace RealworldonetAPI.Presentation.Extensions
                 o.Password.RequireLowercase = true;
                 o.Password.RequireUppercase = false;
                 o.Password.RequiredLength = 8;
-            }).AddEntityFrameworkStores<ApplicationContext>()
+            }).AddEntityFrameworkStores<ApplicationDbContext>()
               .AddDefaultTokenProviders();
         }
 
-
-        // Configure JWT authentication
-
+        /// <summary>
+        /// Configures JWT authentication.
+        /// </summary>
+        /// <param name="services">The service collection.</param>
+        /// <param name="configuration">The configuration instance.</param>
         public static void ConfigureJWT(this IServiceCollection services, IConfiguration configuration)
         {
             var jwtSettings = configuration.GetSection("JwtSettings");
             var secretKey = jwtSettings["key"];
 
-            // Ensure the secret key is securely stored and of sufficient length
             services.AddAuthentication(o =>
             {
                 o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -74,7 +80,5 @@ namespace RealworldonetAPI.Presentation.Extensions
                 };
             });
         }
-
-
     }
 }

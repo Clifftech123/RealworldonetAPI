@@ -5,10 +5,10 @@ namespace RealworldonetAPI.Domain.DTO.user
     {
         public class UserRegisterWrapper
         {
-            public UserRegisterDto User { get; set; }
+            public NewUser User { get; set; }
         }
 
-        public record UserRegisterDto
+        public record NewUser
         {
             public string Username { get; set; }
             public string Email { get; set; }

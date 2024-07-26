@@ -1,10 +1,10 @@
-﻿using RealworldonetAPI.Domain.DTO.user;
+﻿using RealworldonetAPI.Application.DTO.user;
 
 namespace RealworldonetAPI.Domain.Contracts
 {
     public class UserLoginRequest
     {
-        public LoginUserDto? User { get; set; }
+        public LoginUser? User { get; set; }
 
     }
 }

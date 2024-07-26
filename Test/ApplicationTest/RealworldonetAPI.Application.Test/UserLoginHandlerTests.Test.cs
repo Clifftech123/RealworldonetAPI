@@ -4,8 +4,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using RealworldonetAPI.Application.Commands.User;
+using RealworldonetAPI.Application.DTO.user;
 using RealworldonetAPI.Application.Interface;
-using RealworldonetAPI.Domain.DTO.user;
 using RealworldonetAPI.Domain.Entities;
 
 namespace RealworldonetAPI.Tests.Handlers.User
@@ -56,9 +56,9 @@ namespace RealworldonetAPI.Tests.Handlers.User
             var token = "testToken";
             var request = new UserLogin
             {
-                loginUserDto = new LoginUserWrapper
+                loginUserDto = new Application.DTO.user.LoginUserWrapper
                 {
-                    User = new LoginUserDto
+                    User = new Application.DTO.user.LoginUser
                     {
                         Email = user.Email,
                         Password = "TestPassword"
@@ -89,7 +89,7 @@ namespace RealworldonetAPI.Tests.Handlers.User
             });
         }
 
-         // Test for UserLoginHandler
+        // Test for UserLoginHandler
 
         [Fact]
         public async Task Handle_GivenInvalidCredentials_ShouldReturnError()
@@ -99,7 +99,7 @@ namespace RealworldonetAPI.Tests.Handlers.User
             {
                 loginUserDto = new LoginUserWrapper
                 {
-                    User = new LoginUserDto
+                    User = new LoginUser
                     {
                         Email = "wrong@example.com",
                         Password = "WrongPassword"

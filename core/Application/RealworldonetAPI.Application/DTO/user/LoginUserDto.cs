@@ -1,11 +1,12 @@
-﻿namespace RealworldonetAPI.Domain.DTO.user
+﻿namespace RealworldonetAPI.Application.DTO.user
 {
+
     public class LoginUserWrapper
     {
-        public LoginUserDto User { get; set; }
+        public LoginUser User { get; set; }
     }
 
-    public record LoginUserDto
+    public record LoginUser
     {
         public string Email { get; set; }
         public string Password { get; set; }

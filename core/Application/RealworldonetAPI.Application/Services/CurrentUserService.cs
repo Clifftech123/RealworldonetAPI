@@ -18,6 +18,9 @@ namespace RealworldonetAPI.Application.Services
         {
 
             return _httpContextAccessor.HttpContext?.User?.FindFirstValue(ClaimTypes.NameIdentifier);
+
         }
+
+
     }
 }

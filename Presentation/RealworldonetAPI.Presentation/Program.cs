@@ -3,11 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using NLog;
 using RealworldonetAPI.Application.Commands.User;
-using RealworldonetAPI.Application.Exceptions;
 using RealworldonetAPI.Application.Interface;
+using RealworldonetAPI.Application.Mapping;
 using RealworldonetAPI.Application.Services;
 using RealworldonetAPI.Domain.Entities;
 using RealworldonetAPI.Infrastructure.Context;
+using RealworldonetAPI.Infrastructure.Interfaces;
+using RealworldonetAPI.Infrastructure.Repositories;
+using RealworldonetAPI.Presentation.Exceptions;
 using RealworldonetAPI.Presentation.Extensions;
 using System.Reflection;
 
@@ -21,7 +24,8 @@ LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentD
 // Configure Swagger to include Bearer token input
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealWorld API", Version = "v1", Description = "JWT Authentication" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "RealWorld API", Version = "v1", Description = "Real Word API Sample" });
+
 
     // Set the comments path for the Swagger JSON and UI.
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -72,22 +76,27 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<ILoggerManager, LoggerManager>();
+builder.Services.AddScoped<IArticleRepository, ArticleRepository>();
+builder.Services.AddScoped<IProfileRepository, ProfileRepository>();
+builder.Services.AddScoped<ICommentsRepository, CommentsRepository>();
+builder.Services.AddScoped<IFavoritesRepository, FavoritesRepository>();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-builder.Services.AddDbContext<ApplicationContext>(o =>
+builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+builder.Services.AddDbContext<ApplicationDbContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"),
         b => b.MigrationsAssembly("RealworldonetAPI.Infrastructure"));
 });
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<ApplicationContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.AddMediatR(m => m.RegisterServicesFromAssemblyContaining(typeof(RegisterUserHandler)));
+
 builder.Services.AddSingleton<ILoggerManager, LoggerManager>();
 builder.Services.ConfigureCors(builder.Configuration);
 builder.Services.ConfigureIdentity();
 builder.Services.ConfigureJWT(builder.Configuration);
-
 
 
 
@@ -100,6 +109,8 @@ builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();
+
+
 
 app.UseCors("CorsPolicy");
 

@@ -7,17 +7,33 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RealworldonetAPI.Application.Commands.User
 {
+    /// <summary>
+    /// Handles the update of a user.
+    /// </summary>
     public class UpdateUserHandler : IRequestHandler<UpdateUserCommand, UserDto>
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICurrentUserService _currentUser;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateUserHandler"/> class.
+        /// </summary>
+        /// <param name="userManager">The user manager for managing user accounts.</param>
+        /// <param name="currentUser">The service for retrieving the current user.</param>
         public UpdateUserHandler(UserManager<ApplicationUser> userManager, ICurrentUserService currentUser)
         {
             _userManager = userManager;
             _currentUser = currentUser;
         }
 
+        /// <summary>
+        /// Handles the update of a user.
+        /// </summary>
+        /// <param name="request">The command containing the user update details.</param>
+        /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <returns>The details of the updated user.</returns>
+        /// <exception cref="KeyNotFoundException">Thrown when the user is not found.</exception>
+        /// <exception cref="ValidationException">Thrown when the update fails or the password is invalid.</exception>
         public async Task<UserDto> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var userId = _currentUser.GetUserId();
@@ -33,7 +49,7 @@ namespace RealworldonetAPI.Application.Commands.User
             // Update email if provided
             if (!string.IsNullOrWhiteSpace(updateUserDto.Email))
             {
-                user.Email = updateUserDto.Email ?? user.Email; 
+                user.Email = updateUserDto.Email ?? user.Email;
             }
 
             // Update username if provided
